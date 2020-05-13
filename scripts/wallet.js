@@ -26,7 +26,7 @@ function hexStringToByte(str) {
   return new Uint8Array(a);
 }
 
-var MAP = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
+var MAP = "0123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
 
 var to_b58 = function(
     B,            //Uint8Array raw byte input
@@ -100,10 +100,12 @@ var privateKeyBytes = hexStringToByte("1184CD2CDD640CA42CFC3A091C51D549B2F016D45
 var privateKeyHex = byteToHexString(privateKeyBytes).toUpperCase()
 console.log(privateKeyHex) //1184CD2CDD640CA42CFC3A091C51D549B2F016D454B2774019C2B2D2E08529FD
 
-var privateKeyAndVersion = "7A" + privateKeyHex
-var firstSHA = CryptoJS.SHA256(hexStringToByte(privateKeyAndVersion))
-var secondSHA = CryptoJS.SHA256(hexStringToByte(firstSHA))
+var privateKeyAndVersion = "80" + privateKeyHex
+var firstSHA = CryptoJS.SHA256(privateKeyAndVersion).toString(CryptoJS.enc.Hex)
+var secondSHA = CryptoJS.SHA256(firstSHA).toString(CryptoJS.enc.Hex)
 var checksum = String(secondSHA).substr(0, 8).toUpperCase()
+console.log(firstSHA);
+console.log(secondSHA);
 console.log(checksum) //"206EC97E"
 
 //append checksum to end of the private key and version
