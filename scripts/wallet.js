@@ -1,3 +1,6 @@
+
+const secp256k1 = require('secp256k1')
+var RIPEMD160 = require('ripemd160')
 //ByteToHexString Convertions
 function byteToHexString(uint8arr) {
   if (!uint8arr) {
@@ -111,3 +114,46 @@ console.log(keyWithChecksum)
 var privateKeyWIF = to_b58(hexStringToByte(keyWithChecksum), MAP)
 console.log('Private Key')
 console.log(privateKeyWIF)
+
+const pubKeyExtended = secp256k1.publicKeyCreate(privateKeyBytes,false)
+
+var publicKeyHex = byteToHexString(pubKeyExtended).toUpperCase()
+console.log('Public Key')
+console.log(publicKeyHex)
+
+//Having errors inputing HEX into RIPEMD160 and getting proper report
+//Currently Experementing with putting in using Buffer
+
+const pubKeyHashing = new jsSHA("SHA-256", "HEX",{"numRounds" : 1});
+pubKeyHashing.update(publicKeyHex);
+const pubKeyHash = pubKeyHashing.getHash("HEX");
+
+console.log('SHA256 Public Key')
+console.log(pubKeyHash)
+
+var pubKeyHashRipemd160 = new RIPEMD160().update(Buffer.from(hexStringToByte(pubKeyHash))).digest('hex').toUpperCase()
+console.log('RIPEMD160 Public Key')
+console.log(pubKeyHashRipemd160)
+
+var pubKeyHashNetwork = "00"+pubKeyHashRipemd160
+console.log('PubKeyHash w/NetworkBytes')
+console.log(pubKeyHashNetwork)
+
+const pubKeyHashingS = new jsSHA("SHA-256", "HEX",{"numRounds" : 2});
+pubKeyHashingS.update(pubKeyHashNetwork);
+const pubKeyHashingSF = pubKeyHashingS.getHash("HEX").toUpperCase();
+
+console.log('2x SHA256 Public Key Secound Time')
+console.log(pubKeyHashingSF)
+
+var checksumPubKey = String(pubKeyHashingSF).substr(0, 8).toUpperCase()
+console.log("CheckSum Public Key")
+console.log(checksumPubKey)
+
+var pubKeyPreBase = pubKeyHashNetwork + checksumPubKey
+console.log("Pub Key with Checksum")
+console.log(pubKeyPreBase)
+
+var pubKey = to_b58(hexStringToByte(pubKeyPreBase), MAP)
+console.log('Public Key Base 64')
+console.log(pubKey)
