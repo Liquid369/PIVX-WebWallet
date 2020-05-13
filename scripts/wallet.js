@@ -1,33 +1,29 @@
+//ByteToHexString Convertions
 function byteToHexString(uint8arr) {
   if (!uint8arr) {
     return '';
   }
-
   var hexStr = '';
   for (var i = 0; i < uint8arr.length; i++) {
     var hex = (uint8arr[i] & 0xff).toString(16);
     hex = (hex.length === 1) ? '0' + hex : hex;
     hexStr += hex;
   }
-
   return hexStr.toUpperCase();
 }
-
 function hexStringToByte(str) {
   if (!str) {
     return new Uint8Array();
   }
-
   var a = [];
   for (var i = 0, len = str.length; i < len; i+=2) {
     a.push(parseInt(str.substr(i,2),16));
   }
-
   return new Uint8Array(a);
 }
-
+//B58 Encoding Map
 var MAP = "0123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
-
+//B58 Encoding
 var to_b58 = function(
     B,            //Uint8Array raw byte input
     A             //Base58 characters (i.e. "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz")
@@ -54,8 +50,7 @@ var to_b58 = function(
         s += A[d[j]]; //lookup the character associated with each base58 digit
     return s          //return the final base58 string
 }
-
-
+//B58 Decoding
 var from_b58 = function(
     S,            //Base58 encoded string input
     A             //Base58 characters (i.e. "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz")
@@ -85,32 +80,32 @@ var from_b58 = function(
     return new Uint8Array(b) //return the final byte array in Uint8Array format
 }
 
-
 var randArr = new Uint8Array(32) //create a typed array of 32 bytes (256 bits)
 window.crypto.getRandomValues(randArr) //populate array with cryptographically secure random numbers
-
-//some Bitcoin and Crypto methods don't like Uint8Array for input. They expect regular JS arrays.
 // var privateKeyBytes = []
 // for (var i = 0; i < randArr.length; ++i)
 //   privateKeyBytes[i] = randArr[i]
-
-var privateKeyBytes = hexStringToByte("1184CD2CDD640CA42CFC3A091C51D549B2F016D454B2774019C2B2D2E08529FD");
-
+var privateKeyBytes = hexStringToByte("0C28FCA386C7A227600B2FE50B7CAE11EC86D3BF1FBE471BE89827E19D72AA1D");
 //hex string of our private key
 var privateKeyHex = byteToHexString(privateKeyBytes).toUpperCase()
-console.log(privateKeyHex) //1184CD2CDD640CA42CFC3A091C51D549B2F016D454B2774019C2B2D2E08529FD
+console.log(privateKeyHex)
 
 var privateKeyAndVersion = "80" + privateKeyHex
-var firstSHA = CryptoJS.SHA256(privateKeyAndVersion).toString(CryptoJS.enc.Hex)
-var secondSHA = CryptoJS.SHA256(firstSHA).toString(CryptoJS.enc.Hex)
+var firstSHA = CryptoJS.SHA256(privateKeyAndVersion).toString(CryptoJS.enc.Hex).toUpperCase()
+var secondSHA = CryptoJS.SHA256(firstSHA).toString(CryptoJS.enc.Hex).toUpperCase()
 var checksum = String(secondSHA).substr(0, 8).toUpperCase()
-console.log(firstSHA);
-console.log(secondSHA);
-console.log(checksum) //"206EC97E"
+console.log('First SHA256:')
+console.log(firstSHA)
+console.log('Second SHA256:')
+console.log(secondSHA)
+console.log('CheckSum')
+console.log(checksum)
 
 //append checksum to end of the private key and version
 var keyWithChecksum = privateKeyAndVersion + checksum
-console.log(keyWithChecksum) //"801184CD2CDD640CA42CFC3A091C51D549B2F016D454B2774019C2B2D2E08529FD206EC97E"
+console.log('Key With CheckSum')
+console.log(keyWithChecksum)
 
 var privateKeyWIF = to_b58(hexStringToByte(keyWithChecksum), MAP)
-console.log(privateKeyWIF) //"5Hx15HFGyep2CfPxsJKe2fXJsCVn5DEiyoeGGF6JZjGbTRnqfiD"
+console.log('Private Key')
+console.log(privateKeyWIF)
