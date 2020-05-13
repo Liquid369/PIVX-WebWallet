@@ -79,26 +79,27 @@ var from_b58 = function(
         b.push( d[j] );      //append each byte to the result
     return new Uint8Array(b) //return the final byte array in Uint8Array format
 }
-
 var randArr = new Uint8Array(32) //create a typed array of 32 bytes (256 bits)
 window.crypto.getRandomValues(randArr) //populate array with cryptographically secure random numbers
 // var privateKeyBytes = []
 // for (var i = 0; i < randArr.length; ++i)
 //   privateKeyBytes[i] = randArr[i]
-var privateKeyBytes = hexStringToByte("1D90ED1C62763702D66D5ACA1341CCFC0A336BD57C6E3CF50F5A156D0078D1DF");
+var privateKeyBytes = hexStringToByte("0C28FCA386C7A227600B2FE50B7CAE11EC86D3BF1FBE471BE89827E19D72AA1D");
 //hex string of our private key
 var privateKeyHex = byteToHexString(privateKeyBytes).toUpperCase()
+console.log("Private Key")
 console.log(privateKeyHex)
-
 var privateKeyAndVersion = "80" + privateKeyHex
+console.log("Private Key Plus Leading Digits")
 console.log(privateKeyAndVersion)
-var firstSHA = CryptoJS.SHA256(privateKeyAndVersion).toString(CryptoJS.enc.Hex).toUpperCase()
-var secondSHA = CryptoJS.SHA256(firstSHA).toString(CryptoJS.enc.Hex).toUpperCase()
-var checksum = String(secondSHA).substr(0, 8).toUpperCase()
-console.log('First SHA256:')
-console.log(firstSHA)
-console.log('Second SHA256:')
-console.log(secondSHA)
+
+const shaObj = new jsSHA("SHA-256", "HEX",{"numRounds" : 2});
+shaObj.update(privateKeyAndVersion);
+const hash = shaObj.getHash("HEX");
+console.log("Double SHA-256 Hash")
+console.log(hash)
+
+var checksum = String(hash).substr(0, 8).toUpperCase()
 console.log('CheckSum')
 console.log(checksum)
 
