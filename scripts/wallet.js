@@ -86,17 +86,20 @@ var from_b58 = function(
 var randArr = new Uint8Array(32) //create a typed array of 32 bytes (256 bits)
 
 //Base Key Generation
+// var randArr = new Uint8Array(32)
 window.crypto.getRandomValues(randArr) //populate array with cryptographically secure random numbers
 // var privateKeyBytes = []
 // for (var i = 0; i < randArr.length; ++i)
 //   privateKeyBytes[i] = randArr[i]
-var privateKeyBytes = hexStringToByte("0C28FCA386C7A227600B2FE50B7CAE11EC86D3BF1FBE471BE89827E19D72AA1D");
+
+var privateKeyBytes = hexStringToByte("FFE09E40CE1C5F7092801D2388347C552C408FC9056734E8273977E658BC201F"); //FOR TESTING DOES NOT GENERATE NEW NUMBERS
+//IN THE EVENT YOU WANT TO USE THIS TO GENERATE NEW WALLETS COMMENT OUT LINE 95 And uncomment 89 & 91-93 IT WILL GENERATE NEW ADDRS
 
 //Private Key Generation
 var privateKeyHex = byteToHexString(privateKeyBytes).toUpperCase()
 console.log("Private Key")
 console.log(privateKeyHex)
-var privateKeyAndVersion = "80" + privateKeyHex
+var privateKeyAndVersion = "7A" + privateKeyHex + "01"
 console.log("Private Key Plus Leading Digits")
 console.log(privateKeyAndVersion)
 const shaObj = new jsSHA("SHA-256", "HEX",{"numRounds" : 2});
@@ -115,7 +118,7 @@ console.log('Private Key')
 console.log(privateKeyWIF)
 
 //Public Key Generation
-const pubKeyExtended = secp256k1.publicKeyCreate(privateKeyBytes,false)
+const pubKeyExtended = secp256k1.publicKeyCreate(Buffer.from(privateKeyBytes),true)
 var publicKeyHex = byteToHexString(pubKeyExtended).toUpperCase()
 console.log('Public Key')
 console.log(publicKeyHex)
@@ -127,7 +130,7 @@ console.log(pubKeyHash)
 var pubKeyHashRipemd160 = new RIPEMD160().update(Buffer.from(hexStringToByte(pubKeyHash))).digest('hex').toUpperCase()
 console.log('RIPEMD160 Public Key')
 console.log(pubKeyHashRipemd160)
-var pubKeyHashNetwork = "00"+pubKeyHashRipemd160
+var pubKeyHashNetwork = "1E"+pubKeyHashRipemd160
 console.log('PubKeyHash w/NetworkBytes')
 console.log(pubKeyHashNetwork)
 const pubKeyHashingS = new jsSHA("SHA-256", "HEX",{"numRounds" : 2});
