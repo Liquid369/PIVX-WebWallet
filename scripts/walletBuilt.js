@@ -13444,8 +13444,10 @@ function config (name) {
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],58:[function(require,module,exports){
 (function (Buffer){
+//Requires
 const secp256k1 = require('secp256k1')
 var RIPEMD160 = require('ripemd160')
+
 //ByteToHexString Convertions
 function byteToHexString(uint8arr) {
   if (!uint8arr) {
@@ -13469,8 +13471,8 @@ function hexStringToByte(str) {
   }
   return new Uint8Array(a);
 }
-//B58 Encoding Map
-var MAP = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
+
+var MAP = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";//B58 Encoding Map
 //B58 Encoding
 var to_b58 = function(
     B,            //Uint8Array raw byte input
@@ -13529,7 +13531,6 @@ var from_b58 = function(
 }
 var randArr = new Uint8Array(32) //create a typed array of 32 bytes (256 bits)
 
-
 //Base Key Generation
 window.crypto.getRandomValues(randArr) //populate array with cryptographically secure random numbers
 // var privateKeyBytes = []
@@ -13559,7 +13560,7 @@ var privateKeyWIF = to_b58(hexStringToByte(keyWithChecksum), MAP)
 console.log('Private Key')
 console.log(privateKeyWIF)
 
-//Public Key
+//Public Key Generation
 const pubKeyExtended = secp256k1.publicKeyCreate(privateKeyBytes,false)
 var publicKeyHex = byteToHexString(pubKeyExtended).toUpperCase()
 console.log('Public Key')
@@ -13589,7 +13590,6 @@ console.log(pubKeyPreBase)
 var pubKey = to_b58(hexStringToByte(pubKeyPreBase), MAP)
 console.log('Public Key Base 64')
 console.log(pubKey)
-
 
 //Display Text
 document.getElementById('PrivateTxt').innerHTML = privateKeyWIF;
