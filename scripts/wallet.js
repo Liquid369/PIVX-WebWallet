@@ -2,6 +2,11 @@
 const secp256k1 = require('secp256k1')
 var RIPEMD160 = require('ripemd160')
 
+//Settings
+var debug = true;
+
+//Users need not look below here.
+//------------------------------
 //ByteToHexString Convertions
 function byteToHexString(uint8arr) {
   if (!uint8arr) {
@@ -84,85 +89,98 @@ var from_b58 = function(
     return new Uint8Array(b) //return the final byte array in Uint8Array format
 }
 var randArr = new Uint8Array(32) //create a typed array of 32 bytes (256 bits)
+//Wallet Generation
+var walletAlreadyMade = 0;
+global.generateWallet = function() {
+  if(walletAlreadyMade != 0){
+    var walletConfirm = window.confirm("Do you really want to generate a new address? If you haven't saved the last private key the key will get lost forever and any funds with it.")
+  }else{
+    walletConfirm = true;
+  }
+  if(walletConfirm){
+    walletAlreadyMade++;
+    if(debug){
+      var privateKeyBytes = hexStringToByte("FFE09E40CE1C5F7092801D2388347C552C408FC9056734E8273977E658BC201F");
+    }else{
+      var randArr = new Uint8Array(32)
+      window.crypto.getRandomValues(randArr) //populate array with cryptographically secure random numbers
+      var privateKeyBytes = []
+      for (var i = 0; i < randArr.length; ++i)
+        privateKeyBytes[i] = randArr[i]
+    }
+    //Private Key Generation
+    var privateKeyHex = byteToHexString(privateKeyBytes).toUpperCase()
+    var privateKeyAndVersion = "7A" + privateKeyHex + "01"
+    const shaObj = new jsSHA("SHA-256", "HEX",{"numRounds" : 2});
+    shaObj.update(privateKeyAndVersion);
+    const hash = shaObj.getHash("HEX");
+    var checksum = String(hash).substr(0, 8).toUpperCase()
+    var keyWithChecksum = privateKeyAndVersion + checksum
+    var privateKeyWIF = to_b58(hexStringToByte(keyWithChecksum), MAP)
+    //Public Key Generation
+    const pubKeyExtended = secp256k1.publicKeyCreate(Buffer.from(privateKeyBytes),true)
+    var publicKeyHex = byteToHexString(pubKeyExtended).toUpperCase()
+    const pubKeyHashing = new jsSHA("SHA-256", "HEX",{"numRounds" : 1});
+    pubKeyHashing.update(publicKeyHex);
+    const pubKeyHash = pubKeyHashing.getHash("HEX");
+    var pubKeyHashRipemd160 = new RIPEMD160().update(Buffer.from(hexStringToByte(pubKeyHash))).digest('hex').toUpperCase()
+    var pubKeyHashNetwork = "1E"+pubKeyHashRipemd160
+    const pubKeyHashingS = new jsSHA("SHA-256", "HEX",{"numRounds" : 2});
+    pubKeyHashingS.update(pubKeyHashNetwork);
+    const pubKeyHashingSF = pubKeyHashingS.getHash("HEX").toUpperCase();
+    var checksumPubKey = String(pubKeyHashingSF).substr(0, 8).toUpperCase()
+    var pubKeyPreBase = pubKeyHashNetwork + checksumPubKey
+    var pubKey = to_b58(hexStringToByte(pubKeyPreBase), MAP)
+    //Debug Console
+    if(debug){
+      console.log("Private Key")
+      console.log(privateKeyHex)
+      console.log("Private Key Plus Leading Digits")
+      console.log(privateKeyAndVersion)
+      console.log("Double SHA-256 Hash")
+      console.log(hash)
+      console.log('CheckSum')
+      console.log(checksum)
+      console.log('Key With CheckSum')
+      console.log(keyWithChecksum)
+      console.log('Private Key')
+      console.log(privateKeyWIF)
+      console.log('Public Key')
+      console.log(publicKeyHex)
+      console.log('SHA256 Public Key')
+      console.log(pubKeyHash)
+      console.log('RIPEMD160 Public Key')
+      console.log(pubKeyHashRipemd160)
+      console.log('PubKeyHash w/NetworkBytes')
+      console.log(pubKeyHashNetwork)
+      console.log('2x SHA256 Public Key Secound Time')
+      console.log(pubKeyHashingSF)
+      console.log("CheckSum Public Key")
+      console.log(checksumPubKey)
+      console.log("Pub Key with Checksum")
+      console.log(pubKeyPreBase)
+      console.log('Public Key Base 64')
+      console.log(pubKey)
+    }
+    //Display Text
+    document.getElementById('PrivateTxt').innerHTML = privateKeyWIF;
+    document.getElementById('PublicTxt').innerHTML = pubKey;
+    //QR Codes
+    var typeNumber = 4;
+    var errorCorrectionLevel = 'L';
+    var qr = qrcode(typeNumber, errorCorrectionLevel);
+    qr.addData(privateKeyWIF);
+    qr.make();
+    document.getElementById('PrivateQR').innerHTML = qr.createImgTag();
+    var typeNumber = 4;
+    var errorCorrectionLevel = 'L';
+    var qr = qrcode(typeNumber, errorCorrectionLevel);
+    qr.addData(pubKey);
+    qr.make();
+    document.getElementById('PublicQR').innerHTML = qr.createImgTag();
+  }
+}
 
-//Base Key Generation
-// var randArr = new Uint8Array(32)
-window.crypto.getRandomValues(randArr) //populate array with cryptographically secure random numbers
-// var privateKeyBytes = []
-// for (var i = 0; i < randArr.length; ++i)
-//   privateKeyBytes[i] = randArr[i]
-
-var privateKeyBytes = hexStringToByte("FFE09E40CE1C5F7092801D2388347C552C408FC9056734E8273977E658BC201F"); //FOR TESTING DOES NOT GENERATE NEW NUMBERS
-//IN THE EVENT YOU WANT TO USE THIS TO GENERATE NEW WALLETS COMMENT OUT LINE 95 And uncomment 89 & 91-93 IT WILL GENERATE NEW ADDRS
-
-//Private Key Generation
-var privateKeyHex = byteToHexString(privateKeyBytes).toUpperCase()
-console.log("Private Key")
-console.log(privateKeyHex)
-var privateKeyAndVersion = "7A" + privateKeyHex + "01"
-console.log("Private Key Plus Leading Digits")
-console.log(privateKeyAndVersion)
-const shaObj = new jsSHA("SHA-256", "HEX",{"numRounds" : 2});
-shaObj.update(privateKeyAndVersion);
-const hash = shaObj.getHash("HEX");
-console.log("Double SHA-256 Hash")
-console.log(hash)
-var checksum = String(hash).substr(0, 8).toUpperCase()
-console.log('CheckSum')
-console.log(checksum)
-var keyWithChecksum = privateKeyAndVersion + checksum
-console.log('Key With CheckSum')
-console.log(keyWithChecksum)
-var privateKeyWIF = to_b58(hexStringToByte(keyWithChecksum), MAP)
-console.log('Private Key')
-console.log(privateKeyWIF)
-
-//Public Key Generation
-const pubKeyExtended = secp256k1.publicKeyCreate(Buffer.from(privateKeyBytes),true)
-var publicKeyHex = byteToHexString(pubKeyExtended).toUpperCase()
-console.log('Public Key')
-console.log(publicKeyHex)
-const pubKeyHashing = new jsSHA("SHA-256", "HEX",{"numRounds" : 1});
-pubKeyHashing.update(publicKeyHex);
-const pubKeyHash = pubKeyHashing.getHash("HEX");
-console.log('SHA256 Public Key')
-console.log(pubKeyHash)
-var pubKeyHashRipemd160 = new RIPEMD160().update(Buffer.from(hexStringToByte(pubKeyHash))).digest('hex').toUpperCase()
-console.log('RIPEMD160 Public Key')
-console.log(pubKeyHashRipemd160)
-var pubKeyHashNetwork = "1E"+pubKeyHashRipemd160
-console.log('PubKeyHash w/NetworkBytes')
-console.log(pubKeyHashNetwork)
-const pubKeyHashingS = new jsSHA("SHA-256", "HEX",{"numRounds" : 2});
-pubKeyHashingS.update(pubKeyHashNetwork);
-const pubKeyHashingSF = pubKeyHashingS.getHash("HEX").toUpperCase();
-console.log('2x SHA256 Public Key Secound Time')
-console.log(pubKeyHashingSF)
-var checksumPubKey = String(pubKeyHashingSF).substr(0, 8).toUpperCase()
-console.log("CheckSum Public Key")
-console.log(checksumPubKey)
-var pubKeyPreBase = pubKeyHashNetwork + checksumPubKey
-console.log("Pub Key with Checksum")
-console.log(pubKeyPreBase)
-var pubKey = to_b58(hexStringToByte(pubKeyPreBase), MAP)
-console.log('Public Key Base 64')
-console.log(pubKey)
-
-//Display Text
-document.getElementById('PrivateTxt').innerHTML = privateKeyWIF;
-document.getElementById('PublicTxt').innerHTML = pubKey;
-
-//QR Codes
-var typeNumber = 4;
-var errorCorrectionLevel = 'L';
-var qr = qrcode(typeNumber, errorCorrectionLevel);
-qr.addData(privateKeyWIF);
-qr.make();
-document.getElementById('PrivateQR').innerHTML = qr.createImgTag();
-
-var typeNumber = 4;
-var errorCorrectionLevel = 'L';
-var qr = qrcode(typeNumber, errorCorrectionLevel);
-qr.addData(pubKey);
-qr.make();
-document.getElementById('PublicQR').innerHTML = qr.createImgTag();
+//TX Generation
+global.generateTx = function() {
+}
