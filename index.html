@@ -69,11 +69,64 @@ body {font-family: Arial;}
 </div>
 
 <div id="Transaction" class="tabcontent">
-  <h3>Create a Dogec transaction</h3>
+  <h2>One Input and Two Outputs, locktime is set to 0, sequence is set to max.
+    SIGHASH_ALL option is chosen for signing raw Transaction.</h2>
+    <h2>Inputs</h2>
+    <label>Trx Hash</label>
+    <input type="text" id="prevTrxHash">
+    <label>Index</label>
+    <input type="text" id="index">
+    <label>Script</label>
+    <input type="text" id="script">
 
+    <h2>Outputs</h2>
+    <label>Address</label>
+    <input type="text" id="address1">
+    <label>Amount</label>
+    <input type="text" id="value1">
+    <br/>
+    <label>Address</label>
+    <input type="text" id="address2">
+    <label>Amount</label>
+    <input type="text" id="value2">
+    <h2>WIF Key</h2>
+    <label>key</label>
+    <input type="text" id="wif">
+    <br/><br/>
+    <button onclick="createRawTransaction()">Create Raw Signed Transction</button>
+    <br/><br/><br/>
+    <h2>Signed Raw Transaction</h2>
+    <textarea rows="15" cols="70" id="rawTrx"></textarea>
 </div>
+<script type="text/javascript" src="scripts/libs/crypto-min.js"></script>
+ <script type="text/javascript" src="scripts/libs/crypto-sha256.js"></script>
+ <script type="text/javascript" src="scripts/libs/crypto-sha256-hmac.js"></script>
+ <script type="text/javascript" src="scripts/libs/ripemd160.js"></script>
+ <script type="text/javascript" src="scripts/libs/jsbn.js"></script>
+ <script type="text/javascript" src="scripts/libs/ellipticcurve.js"></script>
+ <script type="text/javascript" src="scripts/libs/bitTrx.js"></script>
+ <script type="text/javascript" src="scripts/libs/script.js"></script>
 
+<script type="text/javascript" src="scripts/libs/qrcode.js"></script>
+<script type="text/javascript" src="scripts/libs/sha256.js"></script>
+<script type="text/javascript" src="scripts/wallet.js"></script>
 <script>
+function createRawTransaction() {
+  var trx = bitjs.transaction();
+  var txid = document.getElementById("prevTrxHash").value;
+  var index = document.getElementById("index").value;
+  var script = document.getElementById("script").value;
+  trx.addinput(txid,index,script);
+  var address = document.getElementById("address1").value;
+  var value = document.getElementById("value1").value;
+  trx.addoutput(address,value);
+  var address = document.getElementById("address2").value;
+  var value = document.getElementById("value2").value;
+  trx.addoutput(address,value);
+  var wif = document.getElementById("wif").value;
+  var textArea = document.getElementById("rawTrx");
+  textArea.value = trx.sign(wif,1); //SIGHASH_ALL DEFAULT 1
+}
 function openTab(evt, tabName) {
   var i, tabcontent, tablinks;
   tabcontent = document.getElementsByClassName("tabcontent");
@@ -88,9 +141,6 @@ function openTab(evt, tabName) {
   evt.currentTarget.className += " active";
 }
 </script>
-<script type="text/javascript" src="scripts/libs/qrcode.js"></script>
-<script type="text/javascript" src="scripts/libs/sha256.js"></script>
-<script type="text/javascript" src="scripts/walletBuilt.js"></script>
 </body>
 
 </html>

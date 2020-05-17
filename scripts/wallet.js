@@ -1,7 +1,3 @@
-//Requires
-const secp256k1 = require('secp256k1')
-var RIPEMD160 = require('ripemd160')
-
 //Settings
 var debug = true;
 
@@ -91,7 +87,7 @@ var from_b58 = function(
 var randArr = new Uint8Array(32) //create a typed array of 32 bytes (256 bits)
 //Wallet Generation
 var walletAlreadyMade = 0;
-global.generateWallet = function() {
+generateWallet = function() {
   if(walletAlreadyMade != 0){
     var walletConfirm = window.confirm("Do you really want to generate a new address? If you haven't saved the last private key the key will get lost forever and any funds with it.")
   }else{
@@ -118,12 +114,33 @@ global.generateWallet = function() {
     var keyWithChecksum = privateKeyAndVersion + checksum
     var privateKeyWIF = to_b58(hexStringToByte(keyWithChecksum), MAP)
     //Public Key Generation
-    const pubKeyExtended = secp256k1.publicKeyCreate(Buffer.from(privateKeyBytes),true)
+
+    var privateKeyBigInt = BigInteger.fromByteArrayUnsigned(Crypto.util.hexToBytes(byteToHexString(privateKeyBytes).toUpperCase()));
+    var curve = EllipticCurve.getSECCurveByName("secp256k1");
+    var curvePt = curve.getG().multiply(privateKeyBigInt);
+    var x = curvePt.getX().toBigInteger();
+    var y = curvePt.getY().toBigInteger();
+    var publicKeyBytes = EllipticCurve.integerToBytes(x, 32);
+    publicKeyBytes = publicKeyBytes.concat(EllipticCurve.integerToBytes(y,32));
+    publicKeyBytes.unshift(0x04);
+    if(bitjs.compressed==true){
+      var publicKeyBytesCompressed = EllipticCurve.integerToBytes(x,32)
+      if (y.isEven()){
+       publicKeyBytesCompressed.unshift(0x02)
+      } else {
+        publicKeyBytesCompressed.unshift(0x03)
+      }
+      var pubKeyExtended = publicKeyBytesCompressed;
+    } else {
+      var pubKeyExtended = publicKeyBytes;
+    }
+
+
     var publicKeyHex = byteToHexString(pubKeyExtended).toUpperCase()
     const pubKeyHashing = new jsSHA("SHA-256", "HEX",{"numRounds" : 1});
     pubKeyHashing.update(publicKeyHex);
     const pubKeyHash = pubKeyHashing.getHash("HEX");
-    var pubKeyHashRipemd160 = new RIPEMD160().update(Buffer.from(hexStringToByte(pubKeyHash))).digest('hex').toUpperCase()
+    var pubKeyHashRipemd160 = byteToHexString(ripemd160(hexStringToByte(pubKeyHash))).toUpperCase()
     var pubKeyHashNetwork = "1E"+pubKeyHashRipemd160
     const pubKeyHashingS = new jsSHA("SHA-256", "HEX",{"numRounds" : 2});
     pubKeyHashingS.update(pubKeyHashNetwork);
@@ -131,6 +148,7 @@ global.generateWallet = function() {
     var checksumPubKey = String(pubKeyHashingSF).substr(0, 8).toUpperCase()
     var pubKeyPreBase = pubKeyHashNetwork + checksumPubKey
     var pubKey = to_b58(hexStringToByte(pubKeyPreBase), MAP)
+
     //Debug Console
     if(debug){
       console.log("Private Key")
@@ -147,6 +165,8 @@ global.generateWallet = function() {
       console.log(privateKeyWIF)
       console.log('Public Key')
       console.log(publicKeyHex)
+      console.log('Public Key Extened')
+      console.log(byteToHexString(pubKeyExtended))
       console.log('SHA256 Public Key')
       console.log(pubKeyHash)
       console.log('RIPEMD160 Public Key')
@@ -179,8 +199,4 @@ global.generateWallet = function() {
     qr.make();
     document.getElementById('PublicQR').innerHTML = qr.createImgTag();
   }
-}
-
-//TX Generation
-global.generateTx = function() {
 }
