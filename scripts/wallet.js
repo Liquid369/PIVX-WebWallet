@@ -1,5 +1,5 @@
 //Settings
-var debug = false;
+var debug = true;
 
 //Users need not look below here.
 //------------------------------
