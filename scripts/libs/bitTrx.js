@@ -6,12 +6,6 @@
 	bitjs.pub = 0x1E;
 	bitjs.priv = 0x7A;
 	bitjs.compressed = true;
-	
-	//DEBUGING VALUES
-	// bitjs.pub = 0x6f;
-	// bitjs.priv = 0xef;
-	// bitjs.compressed = false;
-
 
 	/* provide a privkey and return an WIF  */
 	bitjs.privkey2wif = function(h){
