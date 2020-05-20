@@ -47,12 +47,13 @@ body {font-family: Arial;}
 </head>
 <body>
 
-<h2>Doge Cash Web Wallet</h2>
+<h2>Doge Cash Web Wallet <div id='Debug' style='color:red'></div></h2>
 <p>Click on the buttons to start </p>
 
 <div class="tab">
   <button id='keypairclick' class="tablinks" onclick="openTab(event, 'keypair')">keypair</button>
   <button class="tablinks" onclick="openTab(event, 'Transaction')">Create Transaction</button>
+  <button class="tablinks" onclick="openTab(event, 'Settings')">Settings</button>
 </div>
 
 <div id="keypair" class="tabcontent">
@@ -99,18 +100,33 @@ body {font-family: Arial;}
     <h2>Signed Raw Transaction</h2>
     <textarea rows="15" cols="70" id="rawTrx"></textarea>
 </div>
+
+<div id="Settings" class="tabcontent">
+    <form action="javascript:setExplorer()">
+      <label for="explorer">Choose a explorer:</label>
+      <select id="explorer" name="explorer">
+        <option value="explorer.dogec.io">https://explorer.dogec.io/</option>
+        <option value="custom">custom (Not working)</option>
+      </select>
+      <br>
+      <input type="submit">
+  </form>
+  <br>
+  <input type="submit" value='Toggle Debug mode' onclick='toggleDebug()'>
+</div>
 <script type="text/javascript" src="scripts/libs/crypto-min.js"></script>
  <script type="text/javascript" src="scripts/libs/crypto-sha256.js"></script>
  <script type="text/javascript" src="scripts/libs/crypto-sha256-hmac.js"></script>
  <script type="text/javascript" src="scripts/libs/ripemd160.js"></script>
  <script type="text/javascript" src="scripts/libs/jsbn.js"></script>
  <script type="text/javascript" src="scripts/libs/ellipticcurve.js"></script>
- <script type="text/javascript" src="scripts/libs/bitTrx.js"></script>
  <script type="text/javascript" src="scripts/libs/script.js"></script>
-
 <script type="text/javascript" src="scripts/libs/qrcode.js"></script>
 <script type="text/javascript" src="scripts/libs/sha256.js"></script>
+
 <script type="text/javascript" src="scripts/wallet.js"></script>
+<script type="text/javascript" src="scripts/settings.js"></script>
+ <script type="text/javascript" src="scripts/bitTrx.js"></script>
 <script>
 function figureChange(){
   var val1 = parseInt(document.getElementById("value1").value);

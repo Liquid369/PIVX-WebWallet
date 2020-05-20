@@ -3,6 +3,9 @@ var debug = true;
 
 //Users need not look below here.
 //------------------------------
+//Setting variables
+var explorer = 'explorer.dogec.io';
+
 //ByteToHexString Convertions
 function byteToHexString(uint8arr) {
   if (!uint8arr) {
@@ -85,6 +88,11 @@ var from_b58 = function(
     return new Uint8Array(b) //return the final byte array in Uint8Array format
 }
 var randArr = new Uint8Array(32) //create a typed array of 32 bytes (256 bits)
+//Settings
+if(debug){
+    document.getElementById('Debug').innerHTML = "<b> DEBUG MODE </b>";
+}
+
 //Wallet Generation
 var walletAlreadyMade = 0;
 generateWallet = function() {
@@ -114,7 +122,6 @@ generateWallet = function() {
     var keyWithChecksum = privateKeyAndVersion + checksum
     var privateKeyWIF = to_b58(hexStringToByte(keyWithChecksum), MAP)
     //Public Key Generation
-
     var privateKeyBigInt = BigInteger.fromByteArrayUnsigned(Crypto.util.hexToBytes(byteToHexString(privateKeyBytes).toUpperCase()));
     var curve = EllipticCurve.getSECCurveByName("secp256k1");
     var curvePt = curve.getG().multiply(privateKeyBigInt);
@@ -134,8 +141,6 @@ generateWallet = function() {
     } else {
       var pubKeyExtended = publicKeyBytes;
     }
-
-
     var publicKeyHex = byteToHexString(pubKeyExtended).toUpperCase()
     const pubKeyHashing = new jsSHA("SHA-256", "HEX",{"numRounds" : 1});
     pubKeyHashing.update(publicKeyHex);
