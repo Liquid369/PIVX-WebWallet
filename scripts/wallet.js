@@ -1,12 +1,12 @@
 //Settings Defaults
 var debug = true;
 var explorer = 'explorer.dogec.io';
-var publicKeyForNetwork;
 var networkEnabled = false;
 
 //Users need not look below here.
 //------------------------------
 //ByteToHexString Convertions
+var publicKeyForNetwork;
 function byteToHexString(uint8arr) {
   if (!uint8arr) {
     return '';
@@ -92,7 +92,6 @@ var randArr = new Uint8Array(32) //create a typed array of 32 bytes (256 bits)
 if(debug){
     document.getElementById('Debug').innerHTML = "<b> DEBUG MODE </b>";
 }
-
 //Wallet Generation
 var walletAlreadyMade = 0;
 generateWallet = function() {
@@ -153,9 +152,7 @@ generateWallet = function() {
     var checksumPubKey = String(pubKeyHashingSF).substr(0, 8).toUpperCase()
     var pubKeyPreBase = pubKeyHashNetwork + checksumPubKey
     var pubKey = to_b58(hexStringToByte(pubKeyPreBase), MAP)
-    if(networkEnabled){
-      publicKeyForNetwork = pubKey;
-    }
+    publicKeyForNetwork = pubKey;
     //Debug Console
     if(debug){
       console.log("Private Key")
