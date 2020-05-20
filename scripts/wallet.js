@@ -1,11 +1,11 @@
-//Settings
+//Settings Defaults
 var debug = true;
+var explorer = 'explorer.dogec.io';
+var publicKeyForNetwork;
+var networkEnabled = false;
 
 //Users need not look below here.
 //------------------------------
-//Setting variables
-var explorer = 'explorer.dogec.io';
-
 //ByteToHexString Convertions
 function byteToHexString(uint8arr) {
   if (!uint8arr) {
@@ -153,7 +153,9 @@ generateWallet = function() {
     var checksumPubKey = String(pubKeyHashingSF).substr(0, 8).toUpperCase()
     var pubKeyPreBase = pubKeyHashNetwork + checksumPubKey
     var pubKey = to_b58(hexStringToByte(pubKeyPreBase), MAP)
-
+    if(networkEnabled){
+      publicKeyForNetwork = pubKey;
+    }
     //Debug Console
     if(debug){
       console.log("Private Key")

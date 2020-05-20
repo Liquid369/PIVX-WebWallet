@@ -47,13 +47,14 @@ body {font-family: Arial;}
 </head>
 <body>
 
-<h2>Doge Cash Web Wallet <div id='Debug' style='color:red'></div></h2>
+<h2>Doge Cash Web Wallet <div id='Debug' style='color:red'></div><div id='Network' style='color:red'></div></h2>
 <p>Click on the buttons to start </p>
 
 <div class="tab">
   <button id='keypairclick' class="tablinks" onclick="openTab(event, 'keypair')">keypair</button>
   <button class="tablinks" onclick="openTab(event, 'Transaction')">Create Transaction</button>
-  <button class="tablinks" onclick="openTab(event, 'Settings')">Settings</button>
+  <button class="tablinks" onclick="setIframeSrc();openTab(event, 'WalletData')">Network Data</button>
+  <button class="tablinks" onclick="openTab(event, 'Settings');">Settings</button>
 </div>
 
 <div id="keypair" class="tabcontent">
@@ -113,7 +114,14 @@ body {font-family: Arial;}
   </form>
   <br>
   <input type="submit" value='Toggle Debug mode' onclick='toggleDebug()'>
+  <input type="submit" value='Toggle Networking mode' onclick='toggleNetwork()'>
 </div>
+
+<div id="WalletData" class="tabcontent">
+  <div id='networkingNotices'></div>
+  <iframe style='display:none' id='network'></iframe>
+</div>
+
 <script type="text/javascript" src="scripts/libs/crypto-min.js"></script>
  <script type="text/javascript" src="scripts/libs/crypto-sha256.js"></script>
  <script type="text/javascript" src="scripts/libs/crypto-sha256-hmac.js"></script>
@@ -126,8 +134,23 @@ body {font-family: Arial;}
 
 <script type="text/javascript" src="scripts/wallet.js"></script>
 <script type="text/javascript" src="scripts/settings.js"></script>
- <script type="text/javascript" src="scripts/bitTrx.js"></script>
+<script type="text/javascript" src="scripts/bitTrx.js"></script>
 <script>
+function setIframeSrc(){
+  console.log('ran')
+  if(networkEnabled){
+    if(typeof publicKeyForNetwork !== 'undefined'){
+      document.getElementById("network").style = 'height:700px;width:500px;display:block;';
+      document.getElementById("network").src = 'https://' + explorer + '/address/' + publicKeyForNetwork;
+    }else{
+      document.getElementById("networkingNotices").innerHTML = 'No public key ';
+      console.log('networking disabled not loading iframe')
+    }
+  }else{
+    document.getElementById("networkingNotices").innerHTML += 'Network disabled';
+    console.log('networking disabled not loading iframe')
+  }
+}
 function figureChange(){
   var val1 = parseInt(document.getElementById("value1").value);
   var val2 = parseInt(document.getElementById("value2").value);
@@ -170,5 +193,4 @@ function openTab(evt, tabName) {
 document.getElementById("keypairclick").click();
 </script>
 </body>
-
 </html>
