@@ -89,9 +89,11 @@ var from_b58 = function(
 var randArr = new Uint8Array(32) //create a typed array of 32 bytes (256 bits)
 var publicKeyForNetwork;
 var walletAlreadyMade = 0;
+var dogecashversion = '1';
 if(debug){
     document.getElementById('Debug').innerHTML = "<b> DEBUG MODE </b>";
 }
+document.getElementById('dcfooter').innerHTML = '© 2020 DogeCash - All rights reserved. DogeCash webwallet version:'+dogecashversion;
 //Wallet Import
 importWallet= function(){
   if(walletAlreadyMade != 0){
