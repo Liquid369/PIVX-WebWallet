@@ -1,5 +1,5 @@
 //Settings Defaults
-var debug = true;
+var debug = false;
 var explorer = 'explorer.dogec.io';
 var networkEnabled = false;
 
@@ -93,7 +93,7 @@ var dogecashversion = '1';
 if(debug){
     document.getElementById('Debug').innerHTML = "<b> DEBUG MODE </b>";
 }
-document.getElementById('dcfooter').innerHTML = '© 2020 DogeCash - All rights reserved. DogeCash webwallet version:'+dogecashversion;
+document.getElementById('dcfooter').innerHTML = '© 2020 DogeCash - All rights reserved. DogeCash webwallet version:'+dogecashversion +'<br><a href="https://github.com/Luke-Larsen/DogeCashWebWallet">Source code</a>';
 //Wallet Import
 importWallet= function(){
   if(walletAlreadyMade != 0){
