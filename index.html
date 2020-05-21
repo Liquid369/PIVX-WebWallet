@@ -9,8 +9,23 @@
 html{
   font-family: Chivo,sans-serif;
 }
+
 body {
   background-color:#505050
+}
+textarea,input{
+  background-color:	#C0C0C0;
+}
+button{
+  border-radius: 15px;
+  padding: 12px 25px 12px;
+  background-color: #ce9260;
+  border: none;
+  text-align: center;
+  font-size: 16px;
+}
+button:hover{
+  background-color:#ce8500;
 }
 
 /* Style the tab */
@@ -18,9 +33,6 @@ body {
   overflow: hidden;
   border: 1px solid #080808;
   background-color:	#000000;
-}
-textarea,input{
-  background-color:	#C0C0C0;
 }
 /* Style the buttons inside the tab */
 .tab button {
@@ -37,12 +49,12 @@ textarea,input{
 
 /* Change background color of buttons on hover */
 .tab button:hover {
-  background-color: #303030;
+  background-color: #404040;
 }
 
 /* Create an active/current tablink class */
 .tab button.active {
-  background-color: #181818;
+  background-color: #383838;
 }
 
 /* Style the tab content */
@@ -56,10 +68,13 @@ textarea,input{
 }
 </style>
 </head>
+<audio controls id="woof" style='display:none;'>
+<source src="assets/woof.mp3" type="audio/mpeg">
+</audio>
 <body>
-
 <h2>
-  Doge Cash Web Wallet
+  <img src='assets/doge.png' onclick="document.getElementById('woof').play();" alt="Doge" style='vertical-align: middle;width:40px;display:inline'>
+  Web Wallet
   <div style='float:right'>
     <div id='Debug' style='color:#ffa500'></div>
     <div id='Network' style='color:#ffa500'></div>
@@ -83,21 +98,20 @@ textarea,input{
   <div id='generateWallet'>
     <button onclick="generateWallet()">Generate New wallet</button>
   </div>
-  <button id='wToggle'onclick='toggleWallet()'>Import Wallet</button>
+  <br>
+    <button id='wToggle'onclick='toggleWallet()'>Import Wallet</button>
   <br>
   <br>
-  Private:<div id='PrivateTxt'></div>
+  <div style='display:none;' id='Privatelabel'>Private:</div><div id='PrivateTxt'></div>
   <br>
   <div id="PrivateQR"></div>
   <br>
-  Public:<div id='PublicTxt'></div>
+  <div style='display:none;' id='Publiclabel'>Public:</div><div id='PublicTxt'></div>
   <br>
   <div id="PublicQR"></div>
 </div>
 
 <div id="Transaction" class="tabcontent">
-  <h2>One Input and Two Outputs, locktime is set to 0, sequence is set to max.
-    SIGHASH_ALL option is chosen for signing raw Transaction.</h2>
     <h2>Inputs</h2>
     <label>Trx Hash</label>
     <input type="text" id="prevTrxHash">
@@ -106,12 +120,12 @@ textarea,input{
     <label>Script</label>
     <input type="text" id="script">
     <h2>Outputs</h2>
-    <label>Address</label>
+    <label>Output Address 1</label>
     <input type="text" id="address1">
     <label>Amount</label>
     <input type="text" id="value1" onchange='figureChange()'>
     <br/>
-    <label>Address</label>
+    <label>Output address 2</label>
     <input type="text" id="address2">
     <label>Amount</label>
     <input type="text" id="value2" onchange='figureChange()'>
@@ -119,12 +133,13 @@ textarea,input{
     <label>key</label>
     <input type="text" id="wif">
     <br/><br/>
-    <div id='TransactionData'></div>
-    <div style='color:red'>WARNING ANY FUNDS NOT ALLOCATED WILL BE USED AS FEES</div>
+    <b>WARNING ANY FUNDS NOT ALLOCATED WILL BE USED AS FEES</b>
+    <br>
     <button onclick="createRawTransaction()">Create Raw Signed Transction</button>
     <br/><br/><br/>
     <h2>Signed Raw Transaction</h2>
     <textarea rows="15" cols="70" id="rawTrx"></textarea>
+    <h4>Advanced Details: <br>locktime is set to 0, sequence is set to max. SIGHASH_ALL option is chosen for signing raw Transaction.</h4>
 </div>
 
 <div id="Settings" class="tabcontent">
@@ -132,14 +147,14 @@ textarea,input{
       <label for="explorer">Choose a explorer:</label>
       <select id="explorer" name="explorer">
         <option value="explorer.dogec.io">https://explorer.dogec.io/</option>
-        <option value="custom">custom (Not working)</option>
+        <option value="custom">custom (In Development)</option>
       </select>
       <br>
       <input type="submit">
   </form>
   <br>
-  <input type="submit" value='Toggle Debug mode' onclick='toggleDebug()'>
-  <input type="submit" value='Toggle Networking mode' onclick='toggleNetwork()'>
+  <button type="submit" onclick='toggleDebug()'>Toggle Debug mode</button>
+  <button type="submit" onclick='toggleNetwork()'>Toggle Networking mode</button>
 </div>
 
 <div id="WalletData" class="tabcontent">
@@ -188,16 +203,6 @@ function setIframeSrc(){
     document.getElementById("networkingNotices").innerHTML = 'Network disabled';
     document.getElementById("network").src = '';
     document.getElementById("network").style.display = 'none';
-  }
-}
-function figureChange(){
-  var val1 = parseInt(document.getElementById("value1").value);
-  var val2 = parseInt(document.getElementById("value2").value);
-  var address = document.getElementById("address1").value;
-  var address2 = document.getElementById("address2").value;
-  if(val1 && val2){
-    var total = val1 + val2;
-    document.getElementById("TransactionData").innerHTML = `${address} gains ${val1} Dogec <br> ${address2} gains ${val2} Dogec <br> Total in Transaction: ${total}`;
   }
 }
 function createRawTransaction() {

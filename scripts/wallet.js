@@ -149,6 +149,8 @@ importWallet= function(){
     publicKeyForNetwork = pubKey;
     console.log(pubKey);
     //Display Text
+    document.getElementById('Privatelabel').style.display = 'block';
+    document.getElementById('Publiclabel').style.display = 'block';
     document.getElementById('PrivateTxt').innerHTML = privateKeyWIF;
     document.getElementById('PublicTxt').innerHTML = pubKey;
     //QR Codes
@@ -261,6 +263,8 @@ generateWallet = function() {
       console.log(pubKey)
     }
     //Display Text
+    document.getElementById('Privatelabel').style.display = 'block';
+    document.getElementById('Publiclabel').style.display = 'block';
     document.getElementById('PrivateTxt').innerHTML = privateKeyWIF;
     document.getElementById('PublicTxt').innerHTML = pubKey;
     //QR Codes
