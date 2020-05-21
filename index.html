@@ -75,8 +75,15 @@ textarea,input{
 </div>
 
 <div id="keypair" class="tabcontent">
-  <h3>Generate Dogec Key Pair</h3>
-  <button onclick="generateWallet()">Generate New wallet</button>
+  <h3>Generate Dogec wallet</h3>
+  <div id='importWallet' style='display:none;'>
+    <input type="text" id='privateKey' placeholder="Private Key">
+    <button onclick="importWallet()">Import wallet</button>
+  </div>
+  <div id='generateWallet'>
+    <button onclick="generateWallet()">Generate New wallet</button>
+  </div>
+  <button id='wToggle'onclick='toggleWallet()'>Import Wallet</button>
   <br>
   <br>
   Private:<div id='PrivateTxt'></div>
@@ -154,6 +161,18 @@ textarea,input{
 <script type="text/javascript" src="scripts/settings.js"></script>
 <script type="text/javascript" src="scripts/bitTrx.js"></script>
 <script>
+function toggleWallet(){
+  var toggle = document.getElementById("wToggle").innerHTML;
+  if(toggle === "Import Wallet"){
+    document.getElementById("generateWallet").style.display = 'none';
+    document.getElementById("importWallet").style.display = 'block';
+    document.getElementById("wToggle").innerHTML = "Generate Wallet";
+  }else{
+    document.getElementById("generateWallet").style.display = 'block';
+    document.getElementById("importWallet").style.display = 'none';
+    document.getElementById("wToggle").innerHTML = "Import Wallet";
+  }
+}
 function setIframeSrc(){
   if(networkEnabled){
     if(typeof publicKeyForNetwork !== 'undefined'){
@@ -163,12 +182,12 @@ function setIframeSrc(){
     }else{
       document.getElementById("networkingNotices").innerHTML = 'No public key';
       document.getElementById("network").src = '';
-      document.getElementById("network").display = 'none';
+      document.getElementById("network").style.display = 'none';
     }
   }else{
     document.getElementById("networkingNotices").innerHTML = 'Network disabled';
     document.getElementById("network").src = '';
-    document.getElementById("network").display = 'none';
+    document.getElementById("network").style.display = 'none';
   }
 }
 function figureChange(){

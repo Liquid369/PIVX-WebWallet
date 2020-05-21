@@ -6,7 +6,6 @@ var networkEnabled = false;
 //Users need not look below here.
 //------------------------------
 //ByteToHexString Convertions
-var publicKeyForNetwork;
 function byteToHexString(uint8arr) {
   if (!uint8arr) {
     return '';
@@ -88,15 +87,90 @@ var from_b58 = function(
     return new Uint8Array(b) //return the final byte array in Uint8Array format
 }
 var randArr = new Uint8Array(32) //create a typed array of 32 bytes (256 bits)
-//Settings
+var publicKeyForNetwork;
+var walletAlreadyMade = 0;
 if(debug){
     document.getElementById('Debug').innerHTML = "<b> DEBUG MODE </b>";
 }
+//Wallet Import
+importWallet= function(){
+  if(walletAlreadyMade != 0){
+    var walletConfirm = window.confirm("Do you really want to import a new address? If you haven't saved the last private key the key will get lost forever and any funds with it.");
+  }else{
+    walletConfirm = true;
+  }
+  if(walletConfirm){
+    walletAlreadyMade++;
+    //Wallet Import Format to Private Key
+    var privateKeyWIF = document.getElementById("privateKey").value;
+    var byteArryConvert = from_b58(privateKeyWIF, MAP)
+    var droplfour = byteArryConvert.slice(0, byteArryConvert.length-4);
+    var key = droplfour.slice(1, droplfour.length);
+    var privateKeyBytes = key.slice(0, key.length-1);
+    if(debug){
+        //WIF to Private Key
+        console.log(byteToHexString(privateKeyWIF));
+        console.log(byteToHexString(byteArryConvert));
+        console.log(byteToHexString(droplfour));
+        console.log(byteToHexString(privateKeyBytes));
+    }
+    //Public Key Generation
+    var privateKeyBigInt = BigInteger.fromByteArrayUnsigned(Crypto.util.hexToBytes(byteToHexString(privateKeyBytes).toUpperCase()));
+    var curve = EllipticCurve.getSECCurveByName("secp256k1");
+    var curvePt = curve.getG().multiply(privateKeyBigInt);
+    var x = curvePt.getX().toBigInteger();
+    var y = curvePt.getY().toBigInteger();
+    var publicKeyBytes = EllipticCurve.integerToBytes(x, 32);
+    publicKeyBytes = publicKeyBytes.concat(EllipticCurve.integerToBytes(y,32));
+    publicKeyBytes.unshift(0x04);
+    if(bitjs.compressed==true){
+      var publicKeyBytesCompressed = EllipticCurve.integerToBytes(x,32)
+      if (y.isEven()){
+       publicKeyBytesCompressed.unshift(0x02)
+      } else {
+        publicKeyBytesCompressed.unshift(0x03)
+      }
+      var pubKeyExtended = publicKeyBytesCompressed;
+    } else {
+      var pubKeyExtended = publicKeyBytes;
+    }
+    var publicKeyHex = byteToHexString(pubKeyExtended).toUpperCase()
+    const pubKeyHashing = new jsSHA("SHA-256", "HEX",{"numRounds" : 1});
+    pubKeyHashing.update(publicKeyHex);
+    const pubKeyHash = pubKeyHashing.getHash("HEX");
+    var pubKeyHashRipemd160 = byteToHexString(ripemd160(hexStringToByte(pubKeyHash))).toUpperCase()
+    var pubKeyHashNetwork = "1E"+pubKeyHashRipemd160
+    const pubKeyHashingS = new jsSHA("SHA-256", "HEX",{"numRounds" : 2});
+    pubKeyHashingS.update(pubKeyHashNetwork);
+    const pubKeyHashingSF = pubKeyHashingS.getHash("HEX").toUpperCase();
+    var checksumPubKey = String(pubKeyHashingSF).substr(0, 8).toUpperCase()
+    var pubKeyPreBase = pubKeyHashNetwork + checksumPubKey
+    var pubKey = to_b58(hexStringToByte(pubKeyPreBase), MAP)
+    publicKeyForNetwork = pubKey;
+    console.log(pubKey);
+    //Display Text
+    document.getElementById('PrivateTxt').innerHTML = privateKeyWIF;
+    document.getElementById('PublicTxt').innerHTML = pubKey;
+    //QR Codes
+    var typeNumber = 4;
+    var errorCorrectionLevel = 'L';
+    var qr = qrcode(typeNumber, errorCorrectionLevel);
+    qr.addData(privateKeyWIF);
+    qr.make();
+    document.getElementById('PrivateQR').innerHTML = qr.createImgTag();
+    var typeNumber = 4;
+    var errorCorrectionLevel = 'L';
+    var qr = qrcode(typeNumber, errorCorrectionLevel);
+    qr.addData(pubKey);
+    qr.make();
+    document.getElementById('PublicQR').innerHTML = qr.createImgTag();
+  }
+}
+
 //Wallet Generation
-var walletAlreadyMade = 0;
 generateWallet = function() {
   if(walletAlreadyMade != 0){
-    var walletConfirm = window.confirm("Do you really want to generate a new address? If you haven't saved the last private key the key will get lost forever and any funds with it.")
+    var walletConfirm = window.confirm("Do you really want to generate a new address? If you haven't saved the last private key the key will get lost forever and any funds with it.");
   }else{
     walletConfirm = true;
   }
