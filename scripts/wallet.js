@@ -88,6 +88,7 @@ var from_b58 = function(
 }
 var randArr = new Uint8Array(32) //create a typed array of 32 bytes (256 bits)
 var publicKeyForNetwork;
+var privateKeyForTransactions;
 var walletAlreadyMade = 0;
 var dogecashversion = '1';
 if(debug){
@@ -105,12 +106,13 @@ importWallet= function(){
     walletAlreadyMade++;
     //Wallet Import Format to Private Key
     var privateKeyWIF = document.getElementById("privateKey").value;
+    privateKeyForTransactions =privateKeyWIF;
     var byteArryConvert = from_b58(privateKeyWIF, MAP)
     var droplfour = byteArryConvert.slice(0, byteArryConvert.length-4);
     var key = droplfour.slice(1, droplfour.length);
     var privateKeyBytes = key.slice(0, key.length-1);
     if(debug){
-        //WIF to Private Key
+    //WIF to Private Key
         console.log(byteToHexString(privateKeyWIF));
         console.log(byteToHexString(byteArryConvert));
         console.log(byteToHexString(droplfour));
@@ -198,6 +200,7 @@ generateWallet = function() {
     var checksum = String(hash).substr(0, 8).toUpperCase()
     var keyWithChecksum = privateKeyAndVersion + checksum
     var privateKeyWIF = to_b58(hexStringToByte(keyWithChecksum), MAP)
+    privateKeyForTransactions =privateKeyWIF;
     //Public Key Generation
     var privateKeyBigInt = BigInteger.fromByteArrayUnsigned(Crypto.util.hexToBytes(byteToHexString(privateKeyBytes).toUpperCase()));
     var curve = EllipticCurve.getSECCurveByName("secp256k1");
@@ -265,6 +268,7 @@ generateWallet = function() {
       console.log(pubKey)
     }
     //Display Text
+    document.getElementById('genKeyWarning').style.display = 'block';
     document.getElementById('Privatelabel').style.display = 'block';
     document.getElementById('Publiclabel').style.display = 'block';
     document.getElementById('PrivateTxt').innerHTML = privateKeyWIF;
@@ -273,13 +277,13 @@ generateWallet = function() {
     var typeNumber = 4;
     var errorCorrectionLevel = 'L';
     var qr = qrcode(typeNumber, errorCorrectionLevel);
-    qr.addData(privateKeyWIF);
+    qr.addData('dogecash:'+privateKeyWIF);
     qr.make();
     document.getElementById('PrivateQR').innerHTML = qr.createImgTag();
     var typeNumber = 4;
     var errorCorrectionLevel = 'L';
     var qr = qrcode(typeNumber, errorCorrectionLevel);
-    qr.addData(pubKey);
+    qr.addData('dogecash:'+pubKey);
     qr.make();
     document.getElementById('PublicQR').innerHTML = qr.createImgTag();
   }

@@ -1,253 +1,181 @@
 <!DOCTYPE html>
 <html lang='en'>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-<meta content="utf-8" http-equiv="encoding">
-<link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Chivo&display=swap');
-html{
-  font-family: Chivo,sans-serif;
-}
-
-body {
-  background-color:#505050
-}
-textarea,input{
-  background-color:	#C0C0C0;
-}
-button{
-  border-radius: 15px;
-  padding: 12px 25px 12px;
-  background-color: #ce9260;
-  border: none;
-  text-align: center;
-  font-size: 16px;
-}
-button:hover{
-  background-color:#ce8500;
-}
-
-/* Style the tab */
-.tab {
-  overflow: hidden;
-  border: 1px solid #080808;
-  background-color:	#000000;
-}
-/* Style the buttons inside the tab */
-.tab button {
-  background-color: inherit;
-  color:#FFFFFF;
-  float: left;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  padding: 14px 16px;
-  transition: 0.3s;
-  font-size: 17px;
-}
-
-/* Change background color of buttons on hover */
-.tab button:hover {
-  background-color: #404040;
-}
-
-/* Create an active/current tablink class */
-.tab button.active {
-  background-color: #383838;
-}
-
-/* Style the tab content */
-.tabcontent {
-  font-family:sans-serif;
-  display: none;
-  background-color:#888888;
-  padding: 6px 12px;
-  border: 1px solid #303030;
-  border-top: none;
-}
-.footer {
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  background-color: #000;
-  color: white;
-  text-align: center;
-}
-</style>
-</head>
-<audio controls id="woof" style='display:none;'>
-<source src="assets/woof.mp3" type="audio/mpeg">
-</audio>
-<body>
-<h2>
-  <img src='assets/doge.png' onclick="document.getElementById('woof').play();" alt="Doge" style='vertical-align: middle;width:40px;display:inline'>
-  Web Wallet
-  <div style='float:right'>
-    <div id='Debug' style='color:#ffa500'></div>
-    <div id='Network' style='color:#ffa500'></div>
-  </div>
-</h2>
-
-<br>
-<div class="tab">
-  <button id='keypairclick' class="tablinks" onclick="openTab(event, 'keypair')">Keys</button>
-  <button class="tablinks" onclick="openTab(event, 'Transaction')">Create Transaction</button>
-  <button class="tablinks" onclick="setIframeSrc();openTab(event, 'WalletData')">Network Data</button>
-  <button class="tablinks" onclick="openTab(event, 'Settings');">Settings</button>
-</div>
-
-<div id="keypair" class="tabcontent">
-  <h3>Generate Dogec wallet</h3>
-  <div id='importWallet' style='display:none;'>
-    <input type="text" id='privateKey' placeholder="Private Key">
-    <button onclick="importWallet()">Import wallet</button>
-  </div>
-  <div id='generateWallet'>
-    <button onclick="generateWallet()">Create A New Wallet</button>
-  </div>
-  <br>
-    <button id='wToggle'onclick='toggleWallet()'>Access My Wallet</button>
-  <br>
-  <br>
-  <div style='display:none;' id='Privatelabel'>Private:</div><div id='PrivateTxt'></div>
-  <br>
-  <div id="PrivateQR"></div>
-  <br>
-  <div style='display:none;' id='Publiclabel'>Public:</div><div id='PublicTxt'></div>
-  <br>
-  <div id="PublicQR"></div>
-</div>
-
-<div id="Transaction" class="tabcontent">
-    <h2>Inputs</h2>
-    <label>Trx Hash</label>
-    <input type="text" id="prevTrxHash">
-    <label>Index</label>
-    <input type="text" id="index">
-    <label>Script</label>
-    <input type="text" id="script">
-    <h2>Outputs</h2>
-    <label>Output Address 1</label>
-    <input type="text" id="address1">
-    <label>Amount</label>
-    <input type="text" id="value1" onchange='figureChange()'>
-    <br/>
-    <label>Output address 2</label>
-    <input type="text" id="address2">
-    <label>Amount</label>
-    <input type="text" id="value2" onchange='figureChange()'>
-    <h2>WIF Key</h2>
-    <label>key</label>
-    <input type="text" id="wif">
-    <br/><br/>
-    <b>WARNING ANY FUNDS NOT ALLOCATED WILL BE USED AS FEES</b>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+    <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="assets/style/style.css">
+  </head>
+  <audio controls id="woof" style='display:none;'>
+  <source src="assets/woof.mp3" type="audio/mpeg">
+  </audio>
+  <body>
+    <h2>
+      <img src='assets/doge.png' onclick="document.getElementById('woof').play();" alt="Doge" style='vertical-align: middle;width:40px;display:inline'>
+      Web Wallet
+      <div style='float:right'>
+        <div id='Debug' style='color:#ffa500'></div>
+        <div id='Network' style='color:#ffa500'></div>
+      </div>
+    </h2>
     <br>
-    <button onclick="createRawTransaction()">Create Raw Signed Transction</button>
-    <br/><br/><br/>
-    <h2>Signed Raw Transaction</h2>
-    <textarea rows="15" cols="70" id="rawTrx"></textarea>
-    <h4>Advanced Details: <br>locktime is set to 0, sequence is set to max. SIGHASH_ALL option is chosen for signing raw Transaction.</h4>
-</div>
-
-<div id="Settings" class="tabcontent">
-    <form action="javascript:setExplorer()">
-      <label for="explorer">Choose a explorer:</label>
-      <select id="explorer" name="explorer">
-        <option value="explorer.dogec.io">https://explorer.dogec.io/</option>
-        <option value="custom">custom (In Development)</option>
-      </select>
+    <div class="tab">
+      <button id='keypairclick' class="tablinks" onclick="openTab(event, 'keypair')">Keys</button>
+      <button class="tablinks" onclick="openTab(event, 'Transaction')">Create Transaction</button>
+      <button class="tablinks" onclick="setIframeSrc();openTab(event, 'WalletData')">Network Data</button>
+      <button class="tablinks" onclick="openTab(event, 'Settings');">Settings</button>
+    </div>
+    <div id="keypair" class="tabcontent">
+      <h3>Generate Dogec wallet</h3>
+      <div id='importWallet' style='display:none;'>
+        <input type="text" id='privateKey' placeholder="Private Key">
+        <button onclick="importWallet()">Import wallet</button>
+      </div>
+      <div id='generateWallet'>
+        <button onclick="generateWallet()">Create A New Wallet</button>
+      </div>
       <br>
-      <input type="submit">
-  </form>
-  <br>
-  <button type="submit" onclick='toggleDebug()'>Toggle Debug mode</button>
-  <button type="submit" onclick='toggleNetwork()'>Toggle Networking mode</button>
-</div>
+        <button id='wToggle'onclick='toggleWallet()'>Access My Wallet</button>
+      <br>
+      <br>
+      <h4 id='genKeyWarning' style='display:none;'><b>Warning: if you do not save your generated private key you will not have access to the coins associated with that key</b></h4>
+      <br>
+      <div style='display:none;' id='Privatelabel'>Private:</div><div id='PrivateTxt'></div>
+      <br>
+      <div id="PrivateQR"></div>
+      <br>
+      <div style='display:none;' id='Publiclabel'>Public:</div><div id='PublicTxt'></div>
+      <br>
+      <div id="PublicQR"></div>
+    </div>
+    <div id="Transaction" class="tabcontent">
+        <h2>Inputs</h2>
+        <label>Trx Hash</label>
+        <input type="text" id="prevTrxHash">
+        <label>Index</label>
+        <input type="text" id="index">
+        <label>Script</label>
+        <input type="text" id="script">
+        <h2>Outputs</h2>
+        <label>Output Address 1</label>
+        <input type="text" id="address1">
+        <label>Amount</label>
+        <input type="text" id="value1">
+        <br/>
+        <label>Output address 2</label>
+        <input type="text" id="address2">
+        <label>Amount</label>
+        <input type="text" id="value2">
+        <h2>WIF Key</h2>
+        <label>key</label>
+        <input type="text" id="wif">
+        <br/><br/>
+        <b>WARNING ANY FUNDS NOT ALLOCATED WILL BE USED AS FEES</b>
+        <br>
+        <button onclick="createRawTransaction()">Create Raw Signed Transction</button>
+        <br/><br/><br/>
+        <h2>Signed Raw Transaction</h2>
+        <textarea rows="15" cols="70" id="rawTrx"></textarea>
+        <h3>Don't understand how this works? <a target='_blank' href='https://github.com/Luke-Larsen/DogeCashWebWallet#transaction'>Tutorial Here</a>
+        <h4>Advanced Details: <br>locktime is set to 0, sequence is set to max. SIGHASH_ALL option is chosen for signing raw Transaction.</h4>
+    </div>
+    <div id="Settings" class="tabcontent">
+        <form action="javascript:setExplorer()">
+          <label for="explorer">Choose a explorer:</label>
+          <select id="explorer" name="explorer">
+            <option value="explorer.dogec.io">https://explorer.dogec.io/</option>
+            <option value="custom">custom (In Development)</option>
+          </select>
+          <br>
+          <input type="submit">
+      </form>
+      <br>
+      <button type="submit" onclick='toggleDebug()'>Toggle Debug mode</button>
+      <button type="submit" onclick='toggleNetwork()'>Toggle Networking mode</button>
+    </div>
+    <div id="WalletData" class="tabcontent">
+      <div id='networkingNotices'></div>
+      <div>
+          <iframe style='display:none' id='network'></iframe>
+    </div>
+    </div>
+    <div class="footer">
+      <div style='display:inline;' id='dcfooter'></div>
+    </div>
+    <script type="text/javascript" src="scripts/libs/crypto-min.js"></script>
+     <script type="text/javascript" src="scripts/libs/crypto-sha256.js"></script>
+     <script type="text/javascript" src="scripts/libs/crypto-sha256-hmac.js"></script>
+     <script type="text/javascript" src="scripts/libs/ripemd160.js"></script>
+     <script type="text/javascript" src="scripts/libs/jsbn.js"></script>
+     <script type="text/javascript" src="scripts/libs/ellipticcurve.js"></script>
+     <script type="text/javascript" src="scripts/libs/script.js"></script>
+    <script type="text/javascript" src="scripts/libs/qrcode.js"></script>
+    <script type="text/javascript" src="scripts/libs/sha256.js"></script>
 
-<div id="WalletData" class="tabcontent">
-  <div id='networkingNotices'></div>
-  <div>
-      <iframe style='display:none' id='network'></iframe>
-</div>
-</div>
-<div class="footer">
-  <div style='display:inline;' id='dcfooter'></div>
-</div>
-<script type="text/javascript" src="scripts/libs/crypto-min.js"></script>
- <script type="text/javascript" src="scripts/libs/crypto-sha256.js"></script>
- <script type="text/javascript" src="scripts/libs/crypto-sha256-hmac.js"></script>
- <script type="text/javascript" src="scripts/libs/ripemd160.js"></script>
- <script type="text/javascript" src="scripts/libs/jsbn.js"></script>
- <script type="text/javascript" src="scripts/libs/ellipticcurve.js"></script>
- <script type="text/javascript" src="scripts/libs/script.js"></script>
-<script type="text/javascript" src="scripts/libs/qrcode.js"></script>
-<script type="text/javascript" src="scripts/libs/sha256.js"></script>
-
-<script type="text/javascript" src="scripts/wallet.js"></script>
-<script type="text/javascript" src="scripts/settings.js"></script>
-<script type="text/javascript" src="scripts/bitTrx.js"></script>
-<script>
-function toggleWallet(){
-  var toggle = document.getElementById("wToggle").innerHTML;
-  if(toggle === "Access My Wallet"){
-    document.getElementById("generateWallet").style.display = 'none';
-    document.getElementById("importWallet").style.display = 'block';
-    document.getElementById("wToggle").innerHTML = "Create A New Wallet";
-  }else{
-    document.getElementById("generateWallet").style.display = 'block';
-    document.getElementById("importWallet").style.display = 'none';
-    document.getElementById("wToggle").innerHTML = "Access My Wallet";
-  }
-}
-function setIframeSrc(){
-  if(networkEnabled){
-    if(typeof publicKeyForNetwork !== 'undefined'){
-      document.getElementById("networkingNotices").innerHTML = '';
-      document.getElementById("network").style = 'top:0;left:0;width:100%;height:600px;display:block;';
-      document.getElementById("network").src = 'https://' + explorer + '/address/' + publicKeyForNetwork;
-    }else{
-      document.getElementById("networkingNotices").innerHTML = 'No public key';
-      document.getElementById("network").src = '';
-      document.getElementById("network").style.display = 'none';
+    <script type="text/javascript" src="scripts/wallet.js"></script>
+    <script type="text/javascript" src="scripts/settings.js"></script>
+    <script type="text/javascript" src="scripts/bitTrx.js"></script>
+    <script>
+    function toggleWallet(){
+      var toggle = document.getElementById("wToggle").innerHTML;
+      if(toggle === "Access My Wallet"){
+        document.getElementById("generateWallet").style.display = 'none';
+        document.getElementById("importWallet").style.display = 'block';
+        document.getElementById("wToggle").innerHTML = "Create A New Wallet";
+      }else{
+        document.getElementById("generateWallet").style.display = 'block';
+        document.getElementById("importWallet").style.display = 'none';
+        document.getElementById("wToggle").innerHTML = "Access My Wallet";
+      }
     }
-  }else{
-    document.getElementById("networkingNotices").innerHTML = 'Network disabled';
-    document.getElementById("network").src = '';
-    document.getElementById("network").style.display = 'none';
-  }
-}
-function createRawTransaction() {
-  var trx = bitjs.transaction();
-  var txid = document.getElementById("prevTrxHash").value;
-  var index = document.getElementById("index").value;
-  var script = document.getElementById("script").value;
-  trx.addinput(txid,index,script);
-  var address = document.getElementById("address1").value;
-  var value = document.getElementById("value1").value;
-  trx.addoutput(address,value);
-  var address = document.getElementById("address2").value;
-  var value = document.getElementById("value2").value;
-  trx.addoutput(address,value);
-  var wif = document.getElementById("wif").value;
-  var textArea = document.getElementById("rawTrx");
-  textArea.value = trx.sign(wif,1); //SIGHASH_ALL DEFAULT 1
-}
-function openTab(evt, tabName) {
-  var i, tabcontent, tablinks;
-  tabcontent = document.getElementsByClassName("tabcontent");
-  for (i = 0; i < tabcontent.length; i++) {
-    tabcontent[i].style.display = "none";
-  }
-  tablinks = document.getElementsByClassName("tablinks");
-  for (i = 0; i < tablinks.length; i++) {
-    tablinks[i].className = tablinks[i].className.replace(" active", "");
-  }
-  document.getElementById(tabName).style.display = "block";
-  evt.currentTarget.className += " active";
-}
-document.getElementById("keypairclick").click();
-</script>
-</body>
+    function setIframeSrc(){
+      if(networkEnabled){
+        if(typeof publicKeyForNetwork !== 'undefined'){
+          document.getElementById("networkingNotices").innerHTML = '';
+          document.getElementById("network").style = 'top:0;left:0;width:100%;height:600px;display:block;';
+          document.getElementById("network").src = 'https://' + explorer + '/address/' + publicKeyForNetwork;
+        }else{
+          document.getElementById("networkingNotices").innerHTML = 'No public key';
+          document.getElementById("network").src = '';
+          document.getElementById("network").style.display = 'none';
+        }
+      }else{
+        document.getElementById("networkingNotices").innerHTML = 'Network disabled';
+        document.getElementById("network").src = '';
+        document.getElementById("network").style.display = 'none';
+      }
+    }
+    function createRawTransaction() {
+      var trx = bitjs.transaction();
+      var txid = document.getElementById("prevTrxHash").value;
+      var index = document.getElementById("index").value;
+      var script = document.getElementById("script").value;
+      trx.addinput(txid,index,script);
+      var address = document.getElementById("address1").value;
+      var value = document.getElementById("value1").value;
+      trx.addoutput(address,value);
+      var address = document.getElementById("address2").value;
+      var value = document.getElementById("value2").value;
+      trx.addoutput(address,value);
+      var wif = privateKeyForTransactions;
+      var textArea = document.getElementById("rawTrx");
+      textArea.value = trx.sign(wif,1); //SIGHASH_ALL DEFAULT 1
+    }
+    function openTab(evt, tabName) {
+      var i, tabcontent, tablinks;
+      tabcontent = document.getElementsByClassName("tabcontent");
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+      }
+      tablinks = document.getElementsByClassName("tablinks");
+      for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+      }
+      document.getElementById(tabName).style.display = "block";
+      evt.currentTarget.className += " active";
+    }
+    document.getElementById("keypairclick").click();
+    </script>
+  </body>
 </html>
