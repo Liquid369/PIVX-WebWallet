@@ -1,6 +1,7 @@
 # DogeCashWebWallet
 ## Js based wallet for DogeCoin
 #### BETA **_PROCEED WITH CAUTION, DO STORE LARGE AMOUNTS OF FUNDS_**
+Live version at https://wallet.dogec.io
 ### Installation
 To use this web wallet locally click the clone or download button, then chose download as a zip. Unzip the file. Once it is unzipped, open the index.html  
 file in your favorite **_MODERN_** browser.
