@@ -20,7 +20,10 @@ button{
 button:hover{
   background-color:#ce8500;
 }
-
+.pullDown{
+  width:100%;
+  background-color:	#C0C0C0;
+}
 /* Style the tab */
 .tab {
   overflow: hidden;

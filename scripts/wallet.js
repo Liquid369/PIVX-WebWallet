@@ -1,7 +1,7 @@
 //Settings Defaults
-var debug = false;
+var debug = true;
 var explorer = 'explorer.dogec.io';
-var networkEnabled = false;
+var networkEnabled = true;
 
 //Users need not look below here.
 //------------------------------
@@ -93,6 +93,9 @@ var walletAlreadyMade = 0;
 var dogecashversion = '1.01';
 if(debug){
     document.getElementById('Debug').innerHTML = "<b> DEBUG MODE </b>";
+}
+if(networkEnabled){
+    document.getElementById('Network').innerHTML = "<b> Network Enabled </b>";
 }
 document.getElementById('dcfooter').innerHTML = '© 2020 DogeCash - All rights reserved. DogeCash webwallet version : '+dogecashversion +'<br><a href="https://github.com/Luke-Larsen/DogeCashWebWallet">Source code</a>';
 //Wallet Import
