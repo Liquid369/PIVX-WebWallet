@@ -97,7 +97,12 @@
     <div id="WalletData" class="tabcontent">
         <div id='networkingNotices'></div>
         <div id='readout' style='display:none'>
-          <div class='pullDown'>
+          <div>
+            Balance: <span id='balance'></span> | Total Received: <span id='totalReceived'></span> | Total Sent: <span id='totalSent'></span>
+            <span style='float:right' id='addrStr'></span><br>
+            <span style='float:right' id='addrStrQR'></span>
+          </div>
+          <div class='pullDown' style='clear:both;'>
             <div onclick='toggleDropDown("NetworkingJson")'>Pure json:<span style='float:right;'>▼</span></div>
             <div style='background-color:#D0D0D0; width:100%'><textarea rows="15" cols="50" id="NetworkingJson" style='display:none;font-size:1vw;width:99%;overflow:hidden;background-color:#D0D0D0;'></textarea></div>
           </div>
@@ -146,6 +151,7 @@
         if(typeof publicKeyForNetwork !== 'undefined'){
           checkPubKey(); //readout
           document.getElementById("readout").style.display = 'block';
+          document.getElementById("networkingNotices").innerHTML = '';
         }else{
           document.getElementById("networkingNotices").innerHTML = 'No public key';
         }
