@@ -17,7 +17,21 @@ if(networkEnabled){
       qr.make();
       document.getElementById("addrStrQR").innerHTML = qr.createImgTag();
       document.getElementById("addrStr").innerHTML = data['addrStr'];
-
+      //Transactions
+      document.getElementById("TransactionNumber").innerHTML = data['txApperances'];
+      if(data['txApperances'] > 0){
+        var dataTransactions = JSON.stringify(data['transactions']).replace("[","").replace("]","").replace(/"/g,"");
+        const splits = dataTransactions.split(',')
+        var transactionLinks;
+        for (i = 0; i < splits.length; i++) {
+          if(i == 0){
+            transactionLinks = '<a href="' + url + '/api/v1/tx/' + splits[i] + '">'+ splits[i] + '</a><br>';
+          }else{
+            transactionLinks += '<a href="' + url + '/api/v1/tx/' + splits[i] + '">'+ splits[i] + '</a><br>';
+          }
+        }
+        document.getElementById("Transactions").innerHTML = transactionLinks;
+      }
       document.getElementById("NetworkingJson").innerHTML = this.response;
       console.log(data)
       console.log()

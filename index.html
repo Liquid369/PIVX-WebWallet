@@ -97,10 +97,22 @@
     <div id="WalletData" class="tabcontent">
         <div id='networkingNotices'></div>
         <div id='readout' style='display:none'>
-          <div>
+          <div style='float:left;'>
+            Wallet Details
+            <hr>
             Balance: <span id='balance'></span> | Total Received: <span id='totalReceived'></span> | Total Sent: <span id='totalSent'></span>
-            <span style='float:right' id='addrStr'></span><br>
-            <span style='float:right' id='addrStrQR'></span>
+            <br>
+            Transactions:<span id='TransactionNumber'></span>
+            <br>
+            <span id='Transactions'></span>
+
+          </div>
+          <!--Right -->
+          <div style='float:right;'>
+            Address Response
+            <hr>
+            <span id='addrStr'></span><br>
+            <span id='addrStrQR'></span>
           </div>
           <div class='pullDown' style='clear:both;'>
             <div onclick='toggleDropDown("NetworkingJson")'>Pure json:<span style='float:right;'>▼</span></div>
