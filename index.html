@@ -20,6 +20,7 @@
       </div>
     </h2>
     <br>
+    <div style='display:none;background-color:red' id='outdated'>Warning your version is outdated please update to the newest stable version at the <a href='https://github.com/Luke-Larsen/DogeCashWebWallet/releases'>Github</a></div>
     <div class="tab">
       <button id='keypairclick' class="tablinks" onclick="openTab(event, 'keypair')">Keys</button>
       <button class="tablinks" onclick="openTab(event, 'Transaction')">Create Transaction</button>
@@ -50,35 +51,52 @@
       <div id="PublicQR"></div>
     </div>
     <div id="Transaction" class="tabcontent">
-        <h2>Inputs</h2>
-        <label>Trx Hash</label>
-        <input type="text" id="prevTrxHash">
-        <label>Index</label>
-        <input type="text" id="index">
-        <label>Script</label>
-        <input type="text" id="script">
-        <h2>Outputs</h2>
-        <label>Output Address 1</label>
-        <input type="text" id="address1">
-        <label>Amount</label>
-        <input type="text" id="value1">
-        <br/>
-        <label>Output address 2</label>
-        <input type="text" id="address2">
-        <label>Amount</label>
-        <input type="text" id="value2">
-        <h2>WIF Key</h2>
-        <label>key</label>
-        <input type="text" id="wif">
-        <br/><br/>
-        <b>WARNING ANY FUNDS NOT ALLOCATED WILL BE USED AS FEES</b>
-        <br>
-        <button onclick="createRawTransaction()">Create Raw Signed Transction</button>
-        <br/><br/><br/>
-        <h2>Signed Raw Transaction</h2>
-        <textarea rows="15" cols="70" id="rawTrx"></textarea>
-        <h3>Don't understand how this works? <a target='_blank' href='https://github.com/Luke-Larsen/DogeCashWebWallet#transaction'>Tutorial Here</a>
-        <h4>Advanced Details: <br>locktime is set to 0, sequence is set to max. SIGHASH_ALL option is chosen for signing raw Transaction.</h4>
+      <div class='pullDown' style='clear:both;'>
+        <div onclick='toggleDropDown("simpleTransactions")'>Create a Manual Transactions<span style='float:right;'>▼</span></div>
+        <div id='simpleTransactions' style='display:block'>
+          <label>Address</label>
+          <input type="text" id="address1">
+          <label>Amount</label>
+          <input type="text" id="value1">
+          <br>
+          <button onclick="createSimpleTransation()">Create Raw Signed Transction</button>
+        </div>
+      </div>
+      <br>
+      <div class='pullDown' style='clear:both;'>
+        <div onclick='toggleDropDown("advTransactions")'>Create a Manual Transactions<span style='float:right;'>▼</span></div>
+        <div id='advTransactions' style='display:none'>
+          <h2>Inputs</h2>
+          <label>Trx Hash</label>
+          <input type="text" id="prevTrxHash">
+          <label>Index</label>
+          <input type="text" id="index">
+          <label>Script</label>
+          <input type="text" id="script">
+          <h2>Outputs</h2>
+          <label>Output Address 1</label>
+          <input type="text" id="address1">
+          <label>Amount</label>
+          <input type="text" id="value1">
+          <br/>
+          <label>Output address 2</label>
+          <input type="text" id="address2">
+          <label>Amount</label>
+          <input type="text" id="value2">
+          <h2>WIF Key</h2>
+          <label>key</label>
+          <input type="text" id="wif">
+          <br/><br/>
+          <b>WARNING ANY FUNDS NOT ALLOCATED WILL BE USED AS FEES</b>
+          <br>
+          <button onclick="createRawTransaction()">Create Raw Signed Transction</button>
+          <br/><br/><br/>
+          <h2>Signed Raw Transaction</h2>
+          <textarea rows="15" cols="70" id="rawTrx"></textarea>
+          <h3>Don't understand how this works? <a target='_blank' href='https://github.com/Luke-Larsen/DogeCashWebWallet#transaction'>Tutorial Here</a>
+          <h4>Advanced Details: <br>locktime is set to 0, sequence is set to max. SIGHASH_ALL option is chosen for signing raw Transaction.</h4>
+        </div>
+      </div>
     </div>
     <div id="Settings" class="tabcontent">
         <form action="javascript:setExplorer()">
@@ -102,10 +120,10 @@
             <hr>
             Balance: <span id='balance'></span> | Total Received: <span id='totalReceived'></span> | Total Sent: <span id='totalSent'></span>
             <br>
-            Transactions:<span id='TransactionNumber'></span>
-            <br>
-            <span id='Transactions'></span>
-
+            <div class='pullDown' style='clear:both;'>
+              <div onclick='toggleDropDown("Transactions")'>Transactions:<span id='TransactionNumber'>▼</span><span style='float:right;'>▼</span></div>
+              <div style='background-color:#D0D0D0; width:100%'><span style='display:none;' id='Transactions'></span></div>
+            </div>
           </div>
           <!--Right -->
           <div style='float:right;'>
@@ -133,8 +151,8 @@
     <script type="text/javascript" src="scripts/libs/qrcode.js"></script>
     <script type="text/javascript" src="scripts/libs/sha256.js"></script>
 
-    <script type="text/javascript" src="scripts/wallet.js"></script>
     <script type="text/javascript" src="scripts/settings.js"></script>
+    <script type="text/javascript" src="scripts/wallet.js"></script>
     <script type="text/javascript" src="scripts/network.js"></script>
     <script type="text/javascript" src="scripts/bitTrx.js"></script>
     <script>
@@ -171,7 +189,14 @@
         document.getElementById("networkingNotices").innerHTML = 'Network disabled';
       }
     }
+    function createSimpleTransation(){
+      //simple transaction
+      var balance; //Used in showing users how much he can spend
+      var trx = bitjs.transaction();
+      getUnspentTransactions(trx);
+    }
     function createRawTransaction() {
+      //advanced transaction creation and signing
       var trx = bitjs.transaction();
       var txid = document.getElementById("prevTrxHash").value;
       var index = document.getElementById("index").value;
