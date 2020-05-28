@@ -1,9 +1,3 @@
-//Settings Defaults
-var debug = true;
-var explorer = 'explorer.dogec.io';
-var networkEnabled = true;
-//Users need not look below here.
-//------------------------------
 //ByteToHexString Convertions
 function byteToHexString(uint8arr) {
   if (!uint8arr) {
@@ -86,15 +80,8 @@ var from_b58 = function(
     return new Uint8Array(b) //return the final byte array in Uint8Array format
 }
 var randArr = new Uint8Array(32) //create a typed array of 32 bytes (256 bits)
-var publicKeyForNetwork;
-var privateKeyForTransactions;
-var walletAlreadyMade = 0;
-var dogecashversion = '1.00';
 if(debug){
     document.getElementById('Debug').innerHTML = "<b> DEBUG MODE </b>";
-}
-if(networkEnabled){
-    document.getElementById('Network').innerHTML = "<b> Network Enabled </b>";
 }
 document.getElementById('dcfooter').innerHTML = '© 2020 DogeCash - All rights reserved. DogeCash webwallet version : '+dogecashversion +'<br><a href="https://github.com/Luke-Larsen/DogeCashWebWallet">Source code</a>';
 //Wallet Import

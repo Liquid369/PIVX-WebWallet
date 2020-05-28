@@ -1,3 +1,16 @@
+//Settings Defaults
+var debug = true;
+var explorer = 'explorer.dogec.io';
+var networkEnabled = true;
+//Users need not look below here.
+//------------------------------
+var publicKeyForNetwork;
+var trx;
+var amountOfTransactions;
+var balance;
+var privateKeyForTransactions;
+var walletAlreadyMade = 0;
+var dogecashversion = '1.00';
 function setExplorer(){
   explorer = document.getElementById("explorer").value
   alert(`${explorer} has been set succesfully`);
