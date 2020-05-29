@@ -16,6 +16,7 @@ The current setup allows for users to generate one private key and one public ke
 
 #### Transaction
 ##### Simple Transactions
+*Warning in the current state do not use this if you have to have more then 1000 input transactions. In that case it would be better to import your wallet to a software wallet or wait for an update.*
 Simple transactions require you to have networking enabled in order to connect to a explorer. This is required because simple transactions do all of the heavy lifting for you.
 To run a simple transaction go to the transaction tab and simple put in the wallet address you want to send the coins to and the amount everything will be calculated for you and you will see the whole signed transaction displayed to you as well as a user friendly readout of the transaction. You can then click send transaction and the transaction will be sent to your explorer of choice where it will be propigated across the network.
 

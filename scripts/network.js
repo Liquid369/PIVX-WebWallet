@@ -40,21 +40,18 @@ if(networkEnabled){
     // Send request
     request.send()
   }
-  function sleep(milliseconds) {
-    const date = Date.now();
-    let currentDate = null;
-    do {
-      currentDate = Date.now();
-    } while (currentDate - date < milliseconds);
-  }
   var getScriptData = function(txid,index){
     var request = new XMLHttpRequest()
-    request.open('GET', url + '/api/v2/tx/' + txid, true)
+    if(amountOfTransactions <= 1000){
+      request.open('GET', url + '/api/v2/tx/' + txid, true)//Simple queing fix
+    }else{
+      request.open('GET', url + '/api/v2/tx/' + txid, false)
+    }
     request.onload = function(e) {
       if(request.readyState === 4){
         if(request.status === 200){
-          data = JSON.parse(this.response)
-          var script = data['vout'][index]['hex']
+          datar = JSON.parse(this.response)
+          var script = datar['vout'][index]['hex']
           trx.addinput(txid,index,script)
           console.log(trx);
         }
@@ -72,18 +69,28 @@ if(networkEnabled){
       }else{
         amountOfTransactions = JSON.stringify(data['length'])
         var dataTransactions = JSON.stringify(data['0']['txid']);
-        for(i = 0; i < amountOfTransactions; i++) {
-          if(i == 0){
-            balance = parseFloat(Number(data[i]['value'])/100000000);
-          }else{
-            balance = parseFloat(balance) + parseFloat(Number(data[i]['value'])/100000000);
+        // for(i = 0; i < amountOfTransactions; i++) {
+        //   if(i == 0){
+        //     balance = parseFloat(Number(data[i]['value'])/100000000);
+        //   }else{
+        //     balance = parseFloat(balance) + parseFloat(Number(data[i]['value'])/100000000);
+        //   }
+        //   var txid = JSON.stringify(data[i]['txid']).replace(/"/g,"");
+        //   var index = JSON.stringify(data[i]['vout']);
+        //   //Need to create some sort of queing because calling to many ajax
+        //   //aka 5000 will result in it not working.
+        //   getScriptData(txid,index)
+        //   }
+          //Testing Purposes
+          var testingTransactions = 5000;
+          for(i=0;i<testingTransactions; i++){
+            var randomtx = Math.floor(Math.random() * 11);
+            var randomindex = Math.floor(Math.random() * 2); 
+            var txid = JSON.stringify(data[randomtx]['txid']).replace(/"/g,"");
+            var index = JSON.stringify(data[randomindex]['vout']);
+            getScriptData(txid,index)
           }
-          var txid = JSON.stringify(data[i]['txid']).replace(/"/g,"");
-          var index = JSON.stringify(data[i]['vout']);
-          //Need to create some sort of queing because calling to many ajax
-          //aka 5000 will result in it not working.
-          getScriptData(txid,index)
-          }
+
         }
         console.log('Total Balance:' + balance);
       }
