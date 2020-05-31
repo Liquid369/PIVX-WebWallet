@@ -8,6 +8,7 @@ var publicKeyForNetwork;
 var trx;
 var amountOfTransactions;
 var balance;
+var fee;
 var privateKeyForTransactions;
 var walletAlreadyMade = 0;
 var dogecashversion = '1.00';

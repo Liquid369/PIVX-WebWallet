@@ -69,31 +69,36 @@ if(networkEnabled){
       }else{
         amountOfTransactions = JSON.stringify(data['length'])
         var dataTransactions = JSON.stringify(data['0']['txid']);
-        // for(i = 0; i < amountOfTransactions; i++) {
-        //   if(i == 0){
-        //     balance = parseFloat(Number(data[i]['value'])/100000000);
-        //   }else{
-        //     balance = parseFloat(balance) + parseFloat(Number(data[i]['value'])/100000000);
-        //   }
-        //   var txid = JSON.stringify(data[i]['txid']).replace(/"/g,"");
-        //   var index = JSON.stringify(data[i]['vout']);
-        //   //Need to create some sort of queing because calling to many ajax
-        //   //aka 5000 will result in it not working.
-        //   getScriptData(txid,index)
-        //   }
-          //Testing Purposes
-          var testingTransactions = 5000;
-          for(i=0;i<testingTransactions; i++){
-            var randomtx = Math.floor(Math.random() * 11);
-            var randomindex = Math.floor(Math.random() * 2); 
-            var txid = JSON.stringify(data[randomtx]['txid']).replace(/"/g,"");
-            var index = JSON.stringify(data[randomindex]['vout']);
+        if(amountOfTransactions <= 1000){
+          for(i = 0; i < amountOfTransactions; i++) {
+            if(i == 0){
+              balance = parseFloat(Number(data[i]['value'])/100000000);
+            }else{
+              balance = parseFloat(balance) + parseFloat(Number(data[i]['value'])/100000000);
+            }
+            var txid = JSON.stringify(data[i]['txid']).replace(/"/g,"");
+            var index = JSON.stringify(data[i]['vout']);
             getScriptData(txid,index)
+            }
+          }else{
+            //Temporary message for when there are alot of inputs
+            //Probably use change all of this to using websockets will work better
+            document.getElementById("NetworkingJson").innerHTML = '<h3 style="color:red">We are sorry but this address has over 1k inputs. In this version we do not support this. Please import your private key to a desktop wallet or use another option';
           }
-
         }
         console.log('Total Balance:' + balance);
       }
+    request.send()
+  }
+  var calculatefee = function(bytes){
+    var request = new XMLHttpRequest()
+    request.open('GET', url + '/api/v1/estimatefee/10', false)
+    request.onload = function() {
+      data = JSON.parse(this.response)
+      console.log(data);
+      console.log('current fee rate' + data['result']);
+      fee = data['result'];
+    }
     request.send()
   }
   var versionCheck = function(){
