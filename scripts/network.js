@@ -92,18 +92,27 @@ if(networkEnabled){
   }
   var sendTransaction = function(hex){
     if(typeof hex !== 'undefined'){
+      document.getElementById("sendIt").style.display = 'none';
       var request = new XMLHttpRequest()
       request.open('GET', url + '/api/v2/sendtx/'+hex, true)
       request.onload = function() {
         data = JSON.parse(this.response)
         if(typeof data['result'] !== 'undefined'){
           console.log('Transaction sent tx:' + data['result']);
-          document.getElementById("HumanReadable").innerHTML = ('Transaction sent tx:' +data['result']);
+          document.getElementById("transactionFinal").innerHTML = ('<h4 style="color:green">Transaction sent tx:' + data['result'] + '</h4>');
+          document.getElementById("sendIt").style.display = 'none';
+          document.getElementById("loadSimpleTransactions").style.display = 'block';
+          document.getElementById("simpleTransactions").style.display = 'none';
+          document.getElementById("simpleRawTx").innerHTML = '';
+          document.getElementById("HumanReadable").innerHTML = '';
+          document.getElementById("address1s").innerHTML = '';
+          document.getElementById("value1s").innerHTML = '';
         }else{
           console.log('Error sending transaction:' + data['error']['message']);
-          document.getElementById("HumanReadable").innerHTML = ('Error sending transaction:' + data['error']['message']);
+          document.getElementById("transactionFinal").innerHTML = ('<h4 style="color:green">Error sending transaction:' + data + "</h4>");
         }
       }
+
       request.send()
     }else{
       console.log("hex undefined");

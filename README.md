@@ -32,6 +32,7 @@ This show users what the explorer see in association with the public key
 
 #### SETTINGS TAB
 ##### Explorer
+*Note for devs if you want this to connect to your explorer you must set the CORS header to all otherwise local users won't be able to connect to your explorer*
 This is where you can change the explorer this currently is only set up for explorer.dogec.io which is the main current explorer. It is best to currently not mess with this setting as it will be developed more in the future.
 
 ##### Toggles

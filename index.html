@@ -65,11 +65,13 @@
           <input type="text" id="value1s">
           <br>
           <textarea rows="15" cols="70" id="simpleRawTx"></textarea>
+          <br>
           <div id='HumanReadable'></div>
           <br>
           <button onclick="createSimpleTransation()" id='genIt'>Create Raw Signed Transction</button>
           <button onclick="sendTransaction(document.getElementById('simpleRawTx').value)" style='display:none' id='sendIt'>Send Transaction</button>
         </div>
+        <div id='transactionFinal'></div>
       </div>
       <br>
       <div class='pullDown' style='clear:both;'>
@@ -204,6 +206,7 @@
         getUnspentTransactions();
         document.getElementById("loadSimpleTransactions").style.display = 'none';
         document.getElementById("simpleTransactions").style.display = 'block';
+        document.getElementById("genIt").style.display = 'block';
       }else{
         console.log("no Public Key");
       }
