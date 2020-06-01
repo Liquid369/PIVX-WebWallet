@@ -90,6 +90,25 @@ if(networkEnabled){
       }
     request.send()
   }
+  var sendTransaction = function(hex){
+    if(typeof hex !== 'undefined'){
+      var request = new XMLHttpRequest()
+      request.open('GET', url + '/api/v2/sendtx/'+hex, true)
+      request.onload = function() {
+        data = JSON.parse(this.response)
+        if(typeof data['result'] !== 'undefined'){
+          console.log('Transaction sent tx:' + data['result']);
+          document.getElementById("HumanReadable").innerHTML = ('Transaction sent tx:' +data['result']);
+        }else{
+          console.log('Error sending transaction:' + data['error']['message']);
+          document.getElementById("HumanReadable").innerHTML = ('Error sending transaction:' + data['error']['message']);
+        }
+      }
+      request.send()
+    }else{
+      console.log("hex undefined");
+    }
+  }
   var calculatefee = function(bytes){
     var request = new XMLHttpRequest()
     request.open('GET', url + '/api/v1/estimatefee/10', false)

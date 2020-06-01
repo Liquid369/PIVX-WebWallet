@@ -65,7 +65,10 @@
           <input type="text" id="value1s">
           <br>
           <textarea rows="15" cols="70" id="simpleRawTx"></textarea>
-          <button onclick="createSimpleTransation()">Create Raw Signed Transction</button>
+          <div id='HumanReadable'></div>
+          <br>
+          <button onclick="createSimpleTransation()" id='genIt'>Create Raw Signed Transction</button>
+          <button onclick="sendTransaction(document.getElementById('simpleRawTx').value)" style='display:none' id='sendIt'>Send Transaction</button>
         </div>
       </div>
       <br>
@@ -215,14 +218,20 @@
           addresschange = publicKeyForNetwork;
           totalSent = (parseFloat(fee) + parseFloat(value)).toFixed(8);
           valuechange = (parseFloat(balance) - parseFloat(totalSent)).toFixed(8);
-          console.log(balance + ":" + fee + ":" + value + ":" + valuechange +":"+ totalSent);
-          trx.addoutput(addresschange,valuechange);//Change Address
-          if(typeof privateKeyForTransactions !== 'undefined'){
-            var wif = privateKeyForTransactions;
-            var textArea = document.getElementById("simpleRawTx");
-            textArea.value = trx.sign(wif,1);
+          if(totalSent <= balance){
+            document.getElementById("HumanReadable").innerHTML = "Balance:" + balance + "<br>Fee:" + fee + "<br>ToAddress:" + address + "<br>HowMuchSend:" + value + "<br>ChangeAddress:" + addresschange + "<br>HowMuchChange:" +valuechange;
+            trx.addoutput(addresschange,valuechange);//Change Address
+            if(typeof privateKeyForTransactions !== 'undefined'){
+              var wif = privateKeyForTransactions;
+              var textArea = document.getElementById("simpleRawTx");
+              textArea.value = trx.sign(wif,1);
+              document.getElementById("genIt").style.display = 'none';
+              document.getElementById("sendIt").style.display = 'block';
+            }else{
+              console.log("No private key");
+            }
           }else{
-            console.log("No private key");
+            document.getElementById("HumanReadable").innerHTML = "You are trying to send more then you have!";
           }
         }else{
           console.log("No address or value");
