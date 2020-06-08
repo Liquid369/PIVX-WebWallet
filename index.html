@@ -5,150 +5,183 @@
     <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
     <meta content="utf-8" http-equiv="encoding">
     <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="assets/bootstrap-4.5.0/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="assets/style/style.css">
+    <script type="text/javascript" src="assets/bootstrap-4.5.0/js/jquery.js"></script>
+    <script type="text/javascript" src="assets/bootstrap-4.5.0/js/bootstrap.js"></script>
   </head>
   <audio controls id="woof" style='display:none;'>
   <source src="assets/woof.mp3" type="audio/mpeg">
   </audio>
   <body>
-    <h2>
-      <img src='assets/doge.png' onclick="document.getElementById('woof').play();" alt="Doge" style='vertical-align: middle;width:40px;display:inline'>
-      Web Wallet
-      <div style='float:right'>
-        <div id='Debug' style='color:#ffa500'></div>
-        <div id='Network' style='color:#ffa500'></div>
-      </div>
-    </h2>
+      <nav class="navbar navbar-expand-lg sticky-top navbar-dark bg-dark">
+          <img class="navbar-brand" src='assets/doge.png' onclick="document.getElementById('woof').play();" alt="Doge" style='vertical-align: middle;width:40px;display:inline'>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item"><a id='start' class="nav-link" onclick="openTab(event, 'home')">Intro</a></li>
+            <li class="nav-item"><a class="nav-link" onclick="openTab(event, 'keypair')">Wallets</a></li>
+            <li class="nav-item"><a class="nav-link" onclick="openTab(event, 'Transaction')">Create Transaction</a></li>
+            <li class="nav-item"><a class="nav-link" onclick="openTab(event, 'WalletData')">Network Data</a></li>
+            <li class="nav-item"><a class="nav-link" onclick="openTab(event, 'Settings');">Settings</a></li>
+          </ul>
+        </div>
+      </nav>
+
+      <!--
+        <div style='float:right'>
+          <div id='Debug' style='color:#ffa500'></div>
+          <div id='Network' style='color:#ffa500'></div>
+        </div>
+      -->
     <br>
     <div style='display:none;background-color:red' id='outdated'>Warning your version is outdated please update to the newest stable version at the <a href='https://github.com/Luke-Larsen/DogeCashWebWallet/releases'>Github</a></div>
-    <div class="tab">
-      <button id='keypairclick' class="tablinks" onclick="openTab(event, 'keypair')">Keys</button>
-      <button class="tablinks" onclick="openTab(event, 'Transaction')">Create Transaction</button>
-      <button class="tablinks" onclick="setIframeSrc();openTab(event, 'WalletData')">Network Data</button>
-      <button class="tablinks" onclick="openTab(event, 'Settings');">Settings</button>
-    </div>
-    <div id="keypair" class="tabcontent">
-      <h3>Generate Dogec wallet</h3>
-      <div id='importWallet' style='display:none;'>
-        <input type="text" id='privateKey' placeholder="Private Key">
-        <button onclick="importWallet()">Import wallet</button>
+
+    <div class="container-fluid">
+    <div class="row no-gutters">
+      <div class='col-md-1'>
       </div>
-      <div id='generateWallet'>
-        <button onclick="generateWallet()">Create A New Wallet</button>
-      </div>
-      <br>
-        <button id='wToggle'onclick='toggleWallet()'>Access My Wallet</button>
-      <br>
-      <br>
-      <h4 id='genKeyWarning' style='display:none;'><b>Warning: if you do not save your generated private key you will not have access to the coins associated with that key</b></h4>
-      <br>
-      <div style='display:none;' id='Privatelabel'>Private:</div><div id='PrivateTxt'></div>
-      <br>
-      <div id="PrivateQR"></div>
-      <br>
-      <div style='display:none;' id='Publiclabel'>Public:</div><div id='PublicTxt'></div>
-      <br>
-      <div id="PublicQR"></div>
-    </div>
-    <div id="Transaction" class="tabcontent">
-      <div class='pullDown' style='clear:both;'>
-        <div onclick='toggleDropDown("loadSimpleTransactions")'>Create Simple (Automated) Transactions<span style='float:right;'>▼</span></div>
-        <div id='loadSimpleTransactions'>
-          In order to use simple transactions you must first load your wallet
-          <br>
-          <button onclick='loadUnspendInputs()'>Load Wallet</button>
+      <div class='col-md-10'>
+        <div id="home" class="tabcontent">
+          <center><h3> Welcome to the dogecash Web wallet! </h3></center>
+          <h4> A wallet for every one! </h4>
+          <h5 style='text-indent: 30px;'>
+              This web wallet is designed to be able to run on any computer with a modern browser, from a Rasberry Pie to gaming desktop.
+              This wallet can do it! It has also been designed to generate wallets and create transactions without a network connection.
+              Make sure when you run this wallet to run it from a trusted source such as dogec.io or download it from the Github and run it on your computer.
+              We tryed to make the user interface as friendly as possible but in the event that you don't understand something feel free to check out the tutorials at the github
+              or create a issue on that github and we will get to it as fast as possible.
+          </h5>
         </div>
-        <div id='simpleTransactions' style='display:none'>
-          <label>Address</label>
-          <input type="text" id="address1s">
-          <label>Amount</label>
-          <input type="text" id="value1s">
+        <div id="keypair" class="tabcontent">
+          <h3>Generate Dogec wallet</h3>
+          <div id='importWallet' style='display:none;'>
+            <input type="text" id='privateKey' placeholder="Private Key">
+            <button onclick="importWallet()">Import wallet</button>
+          </div>
+          <div id='generateWallet'>
+            <button onclick="generateWallet()">Create A New Wallet</button>
+          </div>
           <br>
-          <textarea rows="15" cols="70" id="simpleRawTx"></textarea>
+            <button id='wToggle'onclick='toggleWallet()'>Access My Wallet</button>
           <br>
-          <div id='HumanReadable'></div>
           <br>
-          <button onclick="createSimpleTransation()" id='genIt'>Create Raw Signed Transction</button>
-          <button onclick="sendTransaction(document.getElementById('simpleRawTx').value)" style='display:none' id='sendIt'>Send Transaction</button>
+          <h4 id='genKeyWarning' style='display:none;'><b>Warning: if you do not save your generated private key you will not have access to the coins associated with that key</b></h4>
+          <br>
+          <div style='display:none;' id='Privatelabel'>Private:</div><div id='PrivateTxt'></div>
+          <br>
+          <div id="PrivateQR"></div>
+          <br>
+          <div style='display:none;' id='Publiclabel'>Public:</div><div id='PublicTxt'></div>
+          <br>
+          <div id="PublicQR"></div>
         </div>
-        <div id='transactionFinal'></div>
-      </div>
-      <br>
-      <div class='pullDown' style='clear:both;'>
-        <div onclick='toggleDropDown("advTransactions")'>Create Manual Transactions<span style='float:right;'>▼</span></div>
-        <div id='advTransactions' style='display:none'>
-          <h2>Inputs</h2>
-          <label>Trx Hash</label>
-          <input type="text" id="prevTrxHash">
-          <label>Index</label>
-          <input type="text" id="index">
-          <label>Script</label>
-          <input type="text" id="script">
-          <h2>Outputs</h2>
-          <label>Output Address 1</label>
-          <input type="text" id="address1">
-          <label>Amount</label>
-          <input type="text" id="value1">
-          <br/>
-          <label>Output address 2</label>
-          <input type="text" id="address2">
-          <label>Amount</label>
-          <input type="text" id="value2">
-          <h2>WIF Key</h2>
-          <label>key</label>
-          <input type="text" id="wif">
-          <br/><br/>
-          <b>WARNING ANY FUNDS NOT ALLOCATED WILL BE USED AS FEES</b>
+        <div id="Transaction" class="tabcontent">
+          <div class='pullDown' style='clear:both;'>
+            <div onclick='toggleDropDown("loadSimpleTransactions")'>Create Simple (Automated) Transactions<span style='float:right;'>▼</span></div>
+            <div id='loadSimpleTransactions'>
+              In order to use simple transactions you must first load your wallet
+              <br>
+              <button onclick='loadUnspendInputs()'>Load Wallet</button>
+            </div>
+            <div id='simpleTransactions' style='display:none'>
+              <label>Address</label>
+              <input type="text" id="address1s">
+              <label>Amount</label>
+              <input type="text" id="value1s">
+              <br>
+              <textarea rows="15" cols="70" id="simpleRawTx"></textarea>
+              <br>
+              <div id='HumanReadable'></div>
+              <br>
+              <button onclick="createSimpleTransation()" id='genIt'>Create Raw Signed Transction</button>
+              <button onclick="sendTransaction(document.getElementById('simpleRawTx').value)" style='display:none' id='sendIt'>Send Transaction</button>
+            </div>
+            <div id='transactionFinal'></div>
+          </div>
           <br>
-          <button onclick="createRawTransaction()">Create Raw Signed Transction</button>
-          <br/><br/><br/>
-          <h2>Signed Raw Transaction</h2>
-          <textarea rows="15" cols="70" id="rawTrx"></textarea>
-          <h3>Don't understand how this works? <a target='_blank' href='https://github.com/Luke-Larsen/DogeCashWebWallet#transaction'>Tutorial Here</a>
-          <h4>Advanced Details: <br>locktime is set to 0, sequence is set to max. SIGHASH_ALL option is chosen for signing raw Transaction.</h4>
-        </div>
-      </div>
-    </div>
-    <div id="Settings" class="tabcontent">
-        <form action="javascript:setExplorer()">
-          <label for="explorer">Choose a explorer:</label>
-          <select id="explorer" name="explorer">
-            <option value="explorer.dogec.io">https://explorer.dogec.io/</option>
-            <option value="custom">custom (In Development)</option>
-          </select>
-          <br>
-          <input type="submit">
-      </form>
-      <br>
-      <button type="submit" onclick='toggleDebug()'>Toggle Debug mode</button>
-      <button type="submit" onclick='toggleNetwork()'>Toggle Networking mode</button>
-    </div>
-    <div id="WalletData" class="tabcontent">
-        <div id='networkingNotices'></div>
-        <div id='readout' style='display:none'>
-          <div style='float:left;'>
-            Wallet Details
-            <hr>
-            Balance: <span id='balance'></span> | Total Received: <span id='totalReceived'></span> | Total Sent: <span id='totalSent'></span>
-            <br>
-            <div class='pullDown' style='clear:both;'>
-              <div onclick='toggleDropDown("Transactions")'>Transactions:<span id='TransactionNumber'>▼</span><span style='float:right;'>▼</span></div>
-              <div style='background-color:#D0D0D0; width:100%'><span style='display:none;' id='Transactions'></span></div>
+          <div class='pullDown' style='clear:both;'>
+            <div onclick='toggleDropDown("advTransactions")'>Create Manual Transactions<span style='float:right;'>▼</span></div>
+            <div id='advTransactions' style='display:none'>
+              <h2>Inputs</h2>
+              <label>Trx Hash</label>
+              <input type="text" id="prevTrxHash">
+              <label>Index</label>
+              <input type="text" id="index">
+              <label>Script</label>
+              <input type="text" id="script">
+              <h2>Outputs</h2>
+              <label>Output Address 1</label>
+              <input type="text" id="address1">
+              <label>Amount</label>
+              <input type="text" id="value1">
+              <br/>
+              <label>Output address 2</label>
+              <input type="text" id="address2">
+              <label>Amount</label>
+              <input type="text" id="value2">
+              <h2>WIF Key</h2>
+              <label>key</label>
+              <input type="text" id="wif">
+              <br/><br/>
+              <b>WARNING ANY FUNDS NOT ALLOCATED WILL BE USED AS FEES</b>
+              <br>
+              <button onclick="createRawTransaction()">Create Raw Signed Transction</button>
+              <br/><br/><br/>
+              <h2>Signed Raw Transaction</h2>
+              <textarea rows="15" cols="70" id="rawTrx"></textarea>
+              <h3>Don't understand how this works? <a target='_blank' href='https://github.com/Luke-Larsen/DogeCashWebWallet#transaction'>Tutorial Here</a>
+              <h4>Advanced Details: <br>locktime is set to 0, sequence is set to max. SIGHASH_ALL option is chosen for signing raw Transaction.</h4>
             </div>
           </div>
-          <!--Right -->
-          <div style='float:right;'>
-            Address Response
-            <hr>
-            <span id='addrStr'></span><br>
-            <span id='addrStrQR'></span>
-          </div>
-          <div class='pullDown' style='clear:both;'>
-            <div onclick='toggleDropDown("NetworkingJson")'>Pure json:<span style='float:right;'>▼</span></div>
-            <div style='background-color:#D0D0D0; width:100%'><textarea rows="15" cols="50" id="NetworkingJson" style='display:none;font-size:1vw;width:99%;overflow:hidden;background-color:#D0D0D0;'></textarea></div>
-          </div>
         </div>
+        <div id="Settings" class="tabcontent">
+            <form action="javascript:setExplorer()">
+              <label for="explorer">Choose a explorer:</label>
+              <select id="explorer" name="explorer">
+                <option value="explorer.dogec.io">https://explorer.dogec.io/</option>
+                <option value="custom">custom (In Development)</option>
+              </select>
+              <br>
+              <input type="submit">
+          </form>
+          <br>
+          <button type="submit" onclick='toggleDebug()'>Toggle Debug mode</button>
+          <button type="submit" onclick='toggleNetwork()'>Toggle Networking mode</button>
+        </div>
+        <div id="WalletData" class="tabcontent">
+            <div id='networkingNotices'></div>
+            <div id='readout' style='display:none'>
+              <div style='float:left;'>
+                Wallet Details
+                <hr>
+                Balance: <span id='balance'></span> | Total Received: <span id='totalReceived'></span> | Total Sent: <span id='totalSent'></span>
+                <br>
+                <div class='pullDown' style='clear:both;'>
+                  <div onclick='toggleDropDown("Transactions")'>Transactions:<span id='TransactionNumber'>▼</span><span style='float:right;'>▼</span></div>
+                  <div style='background-color:#D0D0D0; width:100%'><span style='display:none;' id='Transactions'></span></div>
+                </div>
+              </div>
+              <!--Right -->
+              <div style='float:right;'>
+                Address Response
+                <hr>
+                <span id='addrStr'></span><br>
+                <span id='addrStrQR'></span>
+              </div>
+              <div class='pullDown' style='clear:both;'>
+                <div onclick='toggleDropDown("NetworkingJson")'>Pure json:<span style='float:right;'>▼</span></div>
+                <div style='background-color:#D0D0D0; width:100%'><textarea rows="15" cols="50" id="NetworkingJson" style='display:none;font-size:1vw;width:99%;overflow:hidden;background-color:#D0D0D0;'></textarea></div>
+              </div>
+            </div>
+        </div>
+      </div>
+      <div class='col-md-1'>
+      </div>
     </div>
+  </div>
     <div class="footer">
       <div style='display:inline;' id='dcfooter'></div>
     </div>
@@ -166,6 +199,7 @@
     <script type="text/javascript" src="scripts/wallet.js"></script>
     <script type="text/javascript" src="scripts/network.js"></script>
     <script type="text/javascript" src="scripts/bitTrx.js"></script>
+
     <script>
     function toggleWallet(){
       var toggle = document.getElementById("wToggle").innerHTML;
@@ -273,7 +307,7 @@
       document.getElementById(tabName).style.display = "block";
       evt.currentTarget.className += " active";
     }
-    document.getElementById("keypairclick").click();
+    document.getElementById("start").click();
     </script>
   </body>
 </html>
