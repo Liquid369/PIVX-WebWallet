@@ -24,24 +24,21 @@
             <li class="nav-item"><a id='start' class="nav-link" onclick="openTab(event, 'home')">Intro</a></li>
             <li class="nav-item"><a class="nav-link" onclick="openTab(event, 'keypair')">Wallets</a></li>
             <li class="nav-item"><a class="nav-link" onclick="openTab(event, 'Transaction')">Create Transaction</a></li>
-            <li class="nav-item"><a class="nav-link" onclick="openTab(event, 'WalletData')">Network Data</a></li>
+            <li class="nav-item"><a class="nav-link" onclick="startNetworkTest();openTab(event, 'WalletData');">Network Data</a></li>
             <li class="nav-item"><a class="nav-link" onclick="openTab(event, 'Settings');">Settings</a></li>
           </ul>
         </div>
       </nav>
-
-      <!--
-        <div style='float:right'>
-          <div id='Debug' style='color:#ffa500'></div>
-          <div id='Network' style='color:#ffa500'></div>
-        </div>
-      -->
     <br>
     <div style='display:none;background-color:red' id='outdated'>Warning your version is outdated please update to the newest stable version at the <a href='https://github.com/Luke-Larsen/DogeCashWebWallet/releases'>Github</a></div>
 
     <div class="container-fluid">
     <div class="row no-gutters">
       <div class='col-md-1'>
+        <div style='float:center'>
+          <div id='Debug' style='color:#ffa500'></div>
+          <div id='Network' style='color:#ffa500'></div>
+        </div>
       </div>
       <div class='col-md-10'>
         <div id="home" class="tabcontent">
@@ -221,7 +218,7 @@
         document.getElementById(id).style.display = 'block';
       }
     }
-    function setIframeSrc(){
+    function startNetworkTest(){
       if(networkEnabled){
         if(typeof publicKeyForNetwork !== 'undefined'){
           checkPubKey(); //readout
