@@ -30,7 +30,7 @@
         </div>
       </nav>
     <br>
-    <div style='display:none;background-color:red' id='outdated'>Warning your version is outdated please update to the newest stable version at the <a href='https://github.com/Luke-Larsen/DogeCashWebWallet/releases'>Github</a></div>
+    <div style='display:none;background-color:red;margin-bottom:15px;' id='outdated'>Warning your version is outdated please update to the newest stable version at the <a href='https://github.com/dogecash/dogecash-web-wallet/releases'>Dogecash Github</a></div>
 
     <div class="container-fluid">
     <div class="row no-gutters">
@@ -76,6 +76,7 @@
           <div id="PublicQR"></div>
         </div>
         <div id="Transaction" class="tabcontent">
+          <div id='errorNotice'></div>
           <div class='pullDown' style='clear:both;'>
             <div onclick='toggleDropDown("loadSimpleTransactions")'>Create Simple (Automated) Transactions<span style='float:right;'>▼</span></div>
             <div id='loadSimpleTransactions'>
