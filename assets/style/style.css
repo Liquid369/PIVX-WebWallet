@@ -30,7 +30,6 @@ button:hover{
 
 .pullDown{
   width:100%;
-  background-color:	#C0C0C0;
 }
 /* Style the tab */
 .tab {
@@ -83,4 +82,90 @@ button:hover{
 
 .navbarSpecial{
   background-color:#5e5d61;
+}
+
+/*Breakpoints */
+
+@media screen and (min-width: 1025px) {
+  /* Network Data Settings */
+  #addrStr {
+    font-size: 20px;
+  }
+  #NetworkDataAddrs{
+    float:right;
+  }
+  /*Main Wallet page */
+  #PrivateTxt{
+    font-size: 25px;
+  }
+  #PublicTxt{
+    font-size: 25px;
+  }
+}
+@media screen and (max-width: 1024px) {
+  /* Network Data Settings */
+  #addrStr {
+    font-size: 20px;
+  }
+  #NetworkDataAddrs{
+    float:left;
+  }
+  /*Main Wallet page */
+  #PrivateTxt{
+    font-size: 18px;
+  }
+  #PublicTxt{
+    font-size: 25px;
+  }
+}
+@media screen and (max-width: 768px) {
+  /* Network Data Settings */
+  #addrStr {
+    font-size: 20px;
+  }
+  #NetworkDataAddrs{
+    float:left;
+  }
+  /*Main Wallet page */
+  #PrivateTxt{
+    font-size: 17px;
+  }
+  #PublicTxt{
+    font-size: 25px;
+  }
+
+}
+@media screen and (max-width: 600px) {
+  /* Network Data Settings */
+  #addrStr {
+    font-size: 13px;
+  }
+  #NetworkDataAddrs{
+    float:left;
+  }
+  /*Main Wallet page */
+  #PrivateTxt{
+    font-size: 13px;
+  }
+  #PublicTxt{
+    font-size: 17px;
+  }
+
+}
+@media screen and (max-width: 480px) {
+  /* Network Data Settings */
+  #addrStr {
+    font-size: 13px;
+  }
+  #NetworkDataAddrs{
+    float:left;
+  }
+  /*Main Wallet page */
+  #PrivateTxt{
+    font-size: 8px;
+  }
+  #PublicTxt{
+    font-size: 13px;
+  }
+
 }

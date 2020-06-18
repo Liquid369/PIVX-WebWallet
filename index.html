@@ -85,8 +85,8 @@
         <div id="Transaction" class="tabcontent">
           <div id='errorNotice'></div>
           <div class='pullDown' style='clear:both;'>
-            <div onclick='toggleDropDown("loadSimpleTransactions")'>Create Simple (Automated) Transactions<span style='float:right;'>▼</span></div>
-            <div id='loadSimpleTransactions'>
+            <div onclick='toggleDropDown("loadSimpleTransactions")'>Create Simple Transactions<span style='float:right;'>▼</span></div>
+            <div id='loadSimpleTransactions'style='display:none'>
               In order to use simple transactions you must first load your wallet
               <br>
               <button onclick='loadUnspendInputs()'>Load Wallet</button>
@@ -167,18 +167,22 @@
                 <div class='pullDown' style='clear:both;'>
                   <div onclick='toggleDropDown("Transactions")'>Transactions:<span id='TransactionNumber'>▼</span><span style='float:right;'>▼</span></div>
                   <div style='background-color:#D0D0D0; width:100%'><span style='display:none;' id='Transactions'></span></div>
+                  <br>
+                  <br>
                 </div>
               </div>
               <!--Right -->
-              <div style='float:right;'>
-                Address Response
+              <div id='NetworkDataAddrs'>
+                <span style='margin-left:1px;'>Address Response</span>
                 <hr>
-                <span id='addrStr'></span><br>
-                <span id='addrStrQR'></span>
+                <span id='addrStr' style='margin-left:1px;'></span><br>
+                <span id='addrStrQR' style='margin-left:1px;'></span>
               </div>
               <div class='pullDown' style='clear:both;'>
                 <div onclick='toggleDropDown("NetworkingJson")'>Pure json:<span style='float:right;'>▼</span></div>
-                <div style='background-color:#D0D0D0; width:100%'><textarea rows="15" cols="50" id="NetworkingJson" style='display:none;font-size:1vw;width:99%;overflow:hidden;background-color:#D0D0D0;'></textarea></div>
+                <div style='background-color:#D0D0D0; width:100%'>
+                  <textarea rows="15" cols="50" id="NetworkingJson" style='display:none;font-size:4vw;width:99%;overflow:hidden;background-color:#D0D0D0;'></textarea>
+                </div>
               </div>
             </div>
         </div>
