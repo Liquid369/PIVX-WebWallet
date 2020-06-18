@@ -14,18 +14,20 @@
   <source src="assets/woof.mp3" type="audio/mpeg">
   </audio>
   <body>
-      <nav class="navbar navbar-expand-lg sticky-top navbar-dark bg-dark">
+  <div id="page-container">
+    <div id="content-wrap">
+      <nav class="navbar navbar-expand-lg sticky-top navbar-light navbarSpecial">
           <img class="navbar-brand" src='assets/doge.png' onclick="document.getElementById('woof').play();" alt="Doge" style='vertical-align: middle;width:40px;display:inline'>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav mr-auto">
+        <div class="collapse navbar-collapse" id="navbarNav" >
+          <ul class="navbar-nav mr-auto" style='background-color:#ecd3af;filter: drop-shadow(5px 5px 3px #323232);'>
             <li class="nav-item"><a id='start' class="nav-link" onclick="openTab(event, 'home')">Intro</a></li>
-            <li class="nav-item"><a class="nav-link" onclick="openTab(event, 'keypair')">Wallets</a></li>
-            <li class="nav-item"><a class="nav-link" onclick="openTab(event, 'Transaction')">Create Transaction</a></li>
-            <li class="nav-item"><a class="nav-link" onclick="startNetworkTest();openTab(event, 'WalletData');">Network Data</a></li>
-            <li class="nav-item"><a class="nav-link" onclick="openTab(event, 'Settings');">Settings</a></li>
+            <li class="nav-item"><a class="nav-link" style='color:black;' onclick="openTab(event, 'keypair')">Wallets</a></li>
+            <li class="nav-item"><a class="nav-link" style='color:black;' onclick="openTab(event, 'Transaction')">Create Transaction</a></li>
+            <li class="nav-item"><a class="nav-link" style='color:black;' onclick="startNetworkTest();openTab(event, 'WalletData');">Network Data</a></li>
+            <li class="nav-item"><a class="nav-link" style='color:black;' onclick="openTab(event, 'Settings');">Settings</a></li>
           </ul>
         </div>
       </nav>
@@ -50,6 +52,11 @@
               Make sure when you run this wallet to run it from a trusted source such as dogec.io or download it from the Github and run it on your computer.
               We tryed to make the user interface as friendly as possible but in the event that you don't understand something feel free to check out the tutorials at the github
               or create a issue on that github and we will get to it as fast as possible.
+          </h5>
+          <h4> Generate Paper wallets </h4>
+          <h5 style='text-indent: 30px;'>
+            This web wallet functions much like a paper wallet generator, but with features most normal wallets have. You can also generate transactions offline!
+            Head over to the wallet tab and generate your first wallet. Make sure to keep the key secure! otherwise you may lose all your coins.
           </h5>
         </div>
         <div id="keypair" class="tabcontent">
@@ -143,7 +150,7 @@
                 <option value="custom">custom (In Development)</option>
               </select>
               <br>
-              <input type="submit">
+              <input type="submit" style='background-color:#243646;color:#dddfe2;'>
           </form>
           <br>
           <button type="submit" onclick='toggleDebug()'>Toggle Debug mode</button>
@@ -180,9 +187,11 @@
       </div>
     </div>
   </div>
+</div>
     <div class="footer">
       <div style='display:inline;' id='dcfooter'></div>
     </div>
+  </div>
     <script type="text/javascript" src="scripts/libs/crypto-min.js"></script>
      <script type="text/javascript" src="scripts/libs/crypto-sha256.js"></script>
      <script type="text/javascript" src="scripts/libs/crypto-sha256-hmac.js"></script>
