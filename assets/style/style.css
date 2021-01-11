@@ -7,18 +7,20 @@ body {
   background-color:#1e1d22
 }
 textarea,input{
-  background-color:	#c2c0bd;
+  background-color:	#0f0b16;
 }
 button{
   border-radius: 15px;
   padding: 12px 25px 12px;
-  background-color: #e89a37;
+  background-color: #B088FF;
   border: none;
   text-align: center;
+  color: #FFFFFF;
   font-size: 16px;
 }
 button:hover{
-  background-color:#A8633A;
+  background-color:#1A000000;
+  color: ;
 }
 #page-container {
   position: relative;

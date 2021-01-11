@@ -17,7 +17,7 @@
   <div id="page-container">
     <div id="content-wrap">
       <nav class="navbar navbar-expand-lg sticky-top navbar-light navbarSpecial">
-          <img class="navbar-brand" src='assets/doge.png' onclick="document.getElementById('woof').play();" alt="Doge" style='vertical-align: middle;width:40px;display:inline'>
+          <img class="navbar-brand" src='assets/bitcoin.png' onclick="document.getElementById('woof').play();" alt="Doge" style='vertical-align: middle;width:40px;display:inline'>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -27,12 +27,13 @@
             <li class="nav-item"><a class="nav-link" style='color:black;' onclick="openTab(event, 'keypair')">Wallets</a></li>
             <li class="nav-item"><a class="nav-link" style='color:black;' onclick="openTab(event, 'Transaction')">Create Transaction</a></li>
             <li class="nav-item"><a class="nav-link" style='color:black;' onclick="startNetworkTest();openTab(event, 'WalletData');">Network Data</a></li>
+	    <li class="nav-item"><a class="nav-link" style='color:black;' href="index2.html">SignTool</a></li>
             <li class="nav-item"><a class="nav-link" style='color:black;' onclick="openTab(event, 'Settings');">Settings</a></li>
           </ul>
         </div>
       </nav>
     <br>
-    <div style='display:none;background-color:red;margin-bottom:15px;' id='outdated'>Warning your version is outdated please update to the newest stable version at the <a href='https://github.com/dogecash/dogecash-web-wallet/releases'>Dogecash Github</a></div>
+    <div style='display:none;background-color:red;margin-bottom:15px;' id='outdated'>Warning your version is outdated please update to the newest stable version at the <a href='https://github.com/dogecash/dogecash-web-wallet/releases'>Pivx Github</a></div>
 
     <div class="container-fluid">
     <div class="row no-gutters">
@@ -44,7 +45,7 @@
       </div>
       <div class='col-md-10'>
         <div id="home" class="tabcontent">
-          <center><h3> Welcome to the dogecash Web wallet! </h3></center>
+          <center><h3> Welcome to the Pivx Web wallet! </h3></center>
           <h4> A wallet for every one! </h4>
           <h5 style='text-indent: 30px;'>
               This web wallet is designed to be able to run on any computer with a modern browser, from a Rasberry Pie to gaming desktop.
@@ -60,7 +61,7 @@
           </h5>
         </div>
         <div id="keypair" class="tabcontent">
-          <h3>Generate Dogec wallet</h3>
+          <h3>Generate Pivx wallet</h3>
           <div id='importWallet' style='display:none;'>
             <input type="text" id='privateKey' placeholder="Private Key">
             <button onclick="importWallet()">Import wallet</button>
@@ -146,7 +147,7 @@
             <form action="javascript:setExplorer()">
               <label for="explorer">Choose a explorer:</label>
               <select id="explorer" name="explorer">
-                <option value="explorer.dogec.io">https://explorer.dogec.io/</option>
+                <option value="explorer.pivx.link">https://explorer.pivx.link/</option>
                 <option value="custom">custom (In Development)</option>
               </select>
               <br>

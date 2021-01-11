@@ -1,5 +1,5 @@
-# DogeCashWebWallet
-## Js based wallet for DogeCash
+# PivxWebWallet
+## Js based wallet for Pivx
 
 #### DEV REPO 
 ##### PRODUCTION Repo : https://github.com/dogecash/dogecash-web-wallet

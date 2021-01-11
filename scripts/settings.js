@@ -1,6 +1,6 @@
 //Settings Defaults
-var debug = true;
-var explorer = 'explorer.dogec.io';
+var debug = false;
+var explorer = 'explorer.pivx.link';
 var networkEnabled = true;
 //Users need not look below here.
 //------------------------------
@@ -11,7 +11,7 @@ var balance;
 var fee;
 var privateKeyForTransactions;
 var walletAlreadyMade = 0;
-var dogecashversion = '1.02';
+var wallet_version = '1.02';
 var closeTheAlert = '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>'
 function setExplorer(){
   explorer = document.getElementById("explorer").value

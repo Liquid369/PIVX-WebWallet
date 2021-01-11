@@ -14,7 +14,7 @@ if(networkEnabled){
       var typeNumber = 4;
       var errorCorrectionLevel = 'L';
       var qr = qrcode(typeNumber, errorCorrectionLevel);
-      qr.addData('dogecash:'+ data['addrStr']);
+      qr.addData('Pivx:'+ data['addrStr']);
       qr.make();
       document.getElementById("addrStrQR").innerHTML = qr.createImgTag();
       document.getElementById("addrStr").innerHTML = data['addrStr'];
@@ -136,7 +136,7 @@ if(networkEnabled){
     request.onload = function() {
       data = JSON.parse(this.response)
       var currentReleaseVersion = (data[0]['tag_name']).replace("V","")
-      if(parseFloat(currentReleaseVersion) > parseFloat(dogecashversion)){
+      if(parseFloat(currentReleaseVersion) > parseFloat(wallet_version)){
         console.log("out of date");
         document.getElementById("outdated").style.display='block';
       }

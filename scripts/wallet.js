@@ -83,7 +83,7 @@ var randArr = new Uint8Array(32) //create a typed array of 32 bytes (256 bits)
 if(debug){
     document.getElementById('Debug').innerHTML = "<b> DEBUG MODE </b>";
 }
-document.getElementById('dcfooter').innerHTML = '© 2020 DogeCash - All rights reserved. <br><a href="https://github.com/Luke-Larsen/DogeCashWebWallet">DogeCash webwallet version : '+dogecashversion +'</a>';
+document.getElementById('dcfooter').innerHTML = '© 2020 DogeCash - All rights reserved. <br><a href="https://github.com/Luke-Larsen/DogeCashWebWallet">PIVX webwallet version : '+wallet_version +'</a>';
 //Wallet Import
 importWallet= function(){
   if(walletAlreadyMade != 0){
@@ -182,7 +182,7 @@ generateWallet = function() {
     }
     //Private Key Generation
     var privateKeyHex = byteToHexString(privateKeyBytes).toUpperCase()
-    var privateKeyAndVersion = "7A" + privateKeyHex + "01"
+    var privateKeyAndVersion = "D4" + privateKeyHex + "01"
     const shaObj = new jsSHA("SHA-256", "HEX",{"numRounds" : 2});
     shaObj.update(privateKeyAndVersion);
     const hash = shaObj.getHash("HEX");
@@ -266,13 +266,13 @@ generateWallet = function() {
     var typeNumber = 4;
     var errorCorrectionLevel = 'L';
     var qr = qrcode(typeNumber, errorCorrectionLevel);
-    qr.addData('dogecash:'+privateKeyWIF);
+    qr.addData('Pivx:'+privateKeyWIF);
     qr.make();
     document.getElementById('PrivateQR').innerHTML = qr.createImgTag();
     var typeNumber = 4;
     var errorCorrectionLevel = 'L';
     var qr = qrcode(typeNumber, errorCorrectionLevel);
-    qr.addData('dogecash:'+pubKey);
+    qr.addData('Pivx:'+pubKey);
     qr.make();
     document.getElementById('PublicQR').innerHTML = qr.createImgTag();
   }

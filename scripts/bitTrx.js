@@ -4,7 +4,7 @@
 
 	/* public vars */
 	bitjs.pub = 0x1E;
-	bitjs.priv = 0x7A;
+	bitjs.priv = 0xD4;
 	bitjs.compressed = true;
 
 	/* provide a privkey and return an WIF  */
